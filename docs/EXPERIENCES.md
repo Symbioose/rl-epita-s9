@@ -14,7 +14,7 @@ Le générateur peut créer davantage d'objets nécessaires à une quête que le
 demandé. La largeur 2 introduit des sous-quêtes et des dépendances combinées.
 Ce sont des paramètres de génération, pas une preuve empirique de difficulté :
 contrôler les traces oracle et la longueur effective une fois les jeux générés.
-Les jeux sont compilés en `.ulx`, et non joués depuis le JSON symbolique.
+Les jeux sont compilés en `.z8`, et non joués depuis le JSON symbolique.
 
 ## Expériences et motivation
 
@@ -77,3 +77,12 @@ validation, vérifier que les poids LoRA existent, puis faire les rollouts.
 Conserver aussi les échecs, la configuration et les coûts. Si le protocole change
 après consultation du test, annoncer que ce test a servi au développement et créer
 un nouveau jeu de test pour une conclusion confirmatoire.
+
+## Une aide publique à déclarer
+
+Le texte d'objectif généré par TextWorld peut expliciter plusieurs étapes de la
+quête. Notre agent a accès à cet objectif, comme tout joueur. Cela facilite la
+suivie de consignes et ne démontre pas à lui seul une capacité à inventer un plan.
+Le champ caché `policy_commands` reste réservé à l'expert. Une future ablation
+pourrait remplacer l'objectif détaillé par une formulation courte, mais elle
+changerait le benchmark et demanderait une nouvelle comparaison contrôlée.

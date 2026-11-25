@@ -67,7 +67,7 @@ class PipelineTests(unittest.TestCase):
 
     def test_duplicate_games_and_modified_games(self):
         with tempfile.TemporaryDirectory() as folder:
-            p = Path(folder) / "game.ulx"
+            p = Path(folder) / "game.z8"
             p.write_bytes(b"test")
             row = dict(path=str(p), sha256=digest(p), seed=10)
             validate_manifest([row])

@@ -19,7 +19,7 @@ class TextWorldIntegration(unittest.TestCase):
             options.nb_rooms = 2
             options.nb_objects = 3
             options.quest_length = 2
-            options.path = str(Path(folder) / "game.ulx")
+            options.path = str(Path(folder) / "game.z8")
             game = make_game(options)
             path = compile_game(game, options)
             env = start_game(path, oracle=True)

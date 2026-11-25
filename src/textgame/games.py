@@ -1,4 +1,4 @@
-"""Génération reproductible. Compile en .ulx pour obtenir de vraies observations textuelles."""
+"""Génération reproductible. Compile en .z8 pour obtenir de vraies observations textuelles."""
 import argparse
 from pathlib import Path
 from .common import digest, read_jsonl, write_jsonl
@@ -32,7 +32,7 @@ def generate(root="artifacts", scale=1):
                 for key, value in settings.items():
                     setattr(options, key, value)
                 game = textworld.generator.make_game(options)
-                path = root / "games" / level / split / f"{seed}.ulx"
+                path = root / "games" / level / split / f"{seed}.z8"
                 path.parent.mkdir(parents=True, exist_ok=True)
                 options.path = str(path)
                 textworld.generator.compile_game(game, options)

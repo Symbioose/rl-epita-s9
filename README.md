@@ -146,7 +146,7 @@ et l'oral sont en français.
 ## Démonstration à la soutenance
 
 ```bash
-python scripts/play.py artifacts/games/easy/test/30000.ulx --adapter artifacts/lora_easy
+python scripts/play.py artifacts/games/easy/test/30000.z8 --adapter artifacts/lora_easy
 ```
 
 Si aucun entraînement n'a pu être terminé, montrer le code et expliquer le blocage.

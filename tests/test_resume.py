@@ -16,7 +16,7 @@ class ResumeTests(unittest.TestCase):
             root = Path(folder)
             games = []
             for i in range(2):
-                path = root / f"{i}.ulx"
+                path = root / f"{i}.z8"
                 path.write_text(str(i))
                 games.append(dict(game_id=str(i), seed=i, sha256=digest(path), path=str(path),
                                   level="easy", split="test"))
@@ -49,7 +49,7 @@ class ResumeTests(unittest.TestCase):
     def test_output_without_provenance_is_rejected(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
-            path = root / "game.ulx"
+            path = root / "game.z8"
             path.write_text("game")
             manifest = root / "manifest.jsonl"
             write_jsonl(manifest, [dict(game_id="one", seed=1, sha256=digest(path), path=str(path),
