@@ -73,3 +73,16 @@ mémoriser une formule isolée.
 État actuel : aucun entraînement exécuté, aucun résultat de jeu. Dire explicitement
 « nous avons construit le pipeline, mais son exécution reste à valider » si ce
 blocage persiste au moment de l'oral. Ne pas dire « le modèle gagne » sans trace.
+
+**Pourquoi ne pas avoir utilisé PPO ou DQN pour entraîner le SLM ?** Le socle
+attend un fine-tuning sur des démonstrations. TextWorld fournit un expert, ce qui
+rend l'imitation simple à contrôler et moins coûteuse que l'exploration avec
+récompense sparse. Comparer ensuite une optimisation par retour serait un autre
+projet expérimental ; nous ne présentons pas LoRA comme un algorithme RL.
+
+**Qu'est-ce qui a réellement posé problème techniquement ?** Le format compilé
+pris en charge est `.z8` avec TextWorld 1.7. La compilation locale voulait écrire
+dans un dossier macOS protégé. Linux sur Modal a validé la partie réelle. La
+compilation des jeux avancés est lente : deux processus CPU et un cache validé
+par paramètres et checksum évitent de payer un GPU pour refaire cette étape.
+Ces difficultés d'environnement ne sont pas des résultats scientifiques sur le SLM.

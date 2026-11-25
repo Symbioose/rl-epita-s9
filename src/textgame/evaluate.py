@@ -10,6 +10,14 @@ from .common import read_jsonl, write_jsonl, save_json, public_observation, dige
 from .games import start_game, validate_manifest
 from .agents import RandomAgent, LanguageAgent
 
+METRICS_VERSION = 2
+
+
+def loop_signature(observation, action):
+    # Le feedback contient un compteur de coups qui change même lors d'un cycle.
+    # Une revisite observable se mesure sur la pièce, l'inventaire et la commande.
+    return (observation["description"], observation["inventory"], action.strip().casefold())
+
 
 def wilson(successes, total):
     if not total:
@@ -55,9 +63,10 @@ def rollout(game, agent, kind="model", max_steps=30, env_factory=start_game):
             else:
                 action = agent.act(history, obs)
             # look / inventory sont des commandes valides mais non productives.
-            is_invalid = action not in admissible and action not in {"look", "inventory"}
+            normalized = action.strip().casefold()
+            is_invalid = normalized not in {a.casefold() for a in admissible} and normalized not in {"look", "inventory"}
             invalid += int(is_invalid)
-            signature = (obs["description"], obs["inventory"], obs["feedback"], action)
+            signature = loop_signature(obs, action)
             loop |= signature in seen
             seen.add(signature)
             next_state, next_score, done = env.step(action)
@@ -89,6 +98,7 @@ def evaluate(manifest="artifacts/manifest.jsonl", output="artifacts/eval/base_ea
     output = Path(output)
     config = dict(level=level, split=split, kind=kind, adapter=adapter,
                   history_size=history_size, max_steps=max_steps, seed=seed,
+                  metrics_version=METRICS_VERSION,
                   manifest_sha256=digest(manifest))
     if adapter:
         weights = Path(adapter) / "adapter_model.safetensors"

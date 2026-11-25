@@ -14,6 +14,9 @@ def export(source, output):
     .kicker {font-size:25px; margin:0 0 26px; color:#74dece}
     h1 {font-size:58px; line-height:1.08; margin:0 0 38px; max-width:1080px}
     .body {font-size:34px; line-height:1.5; white-space:pre-line; margin:0; max-width:1080px}
+    .chart {display:block; width:1080px; height:auto; max-height:470px; object-fit:contain}
+    .chart-slide h1 {font-size:44px; margin-bottom:12px}
+    .chart-slide .kicker {font-size:22px; margin-bottom:14px}
     .foot {position:absolute; left:100px; right:100px; bottom:28px;
       font-size:14px; display:flex; justify-content:space-between; color:#aabdc8}
     aside,nav {display:none!important}

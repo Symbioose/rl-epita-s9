@@ -1,0 +1,15 @@
+{
+  "mixed_train": {
+    "examples": 1179,
+    "encoded": 1179,
+    "max_length": 1024,
+    "errors": []
+  },
+  "mixed_validation": {
+    "examples": 192,
+    "encoded": 192,
+    "max_length": 1020,
+    "errors": []
+  },
+  "easy_inputs_unchanged": 415
+}

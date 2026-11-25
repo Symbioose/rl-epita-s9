@@ -1,3 +1,5 @@
+test_execution_errors_are_not_silently_filtered (test_collection.CollectionTests.test_execution_errors_are_not_silently_filtered) ... ok
+test_reject_losing_episode_and_never_collect_test (test_collection.CollectionTests.test_reject_losing_episode_and_never_collect_test) ... ok
 test_action_only_loss (test_pipeline.PipelineTests.test_action_only_loss) ... ok
 test_duplicate_games_and_modified_games (test_pipeline.PipelineTests.test_duplicate_games_and_modified_games) ... ok
 test_empty_generation (test_pipeline.PipelineTests.test_empty_generation) ... ok
@@ -14,6 +16,6 @@ test_resume_only_pending_games_and_reject_changed_config (test_resume.ResumeTest
 test_compiled_game_has_text_and_oracle_wins (test_textworld_integration.TextWorldIntegration.test_compiled_game_has_text_and_oracle_wins) ... ok
 
 ----------------------------------------------------------------------
-Ran 14 tests in 11.239s
+Ran 16 tests in 6.538s
 
 OK

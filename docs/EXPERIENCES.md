@@ -52,11 +52,12 @@ Aucune optimisation d'hyperparamètres guidée par le test.
   de réentraînement. Avec seulement 40 jeux, 1 victoire représente 2,5 points.
 - Coups moyens sur tous les épisodes, et séparément sur les réussites.
   La moyenne sur les seules réussites est `null` si aucune réussite.
-- Invalidité opérationnelle : commande générée absente des actions admissibles,
+- Invalidité opérationnelle : commande générée absente des actions admissibles
+  après comparaison insensible à la casse,
   sauf `look` et `inventory`. Ce n'est pas une mesure parfaite de la validité du
   parseur : des synonymes compris peuvent être comptés invalides. Aucune projection
   vers l'action admissible n'est appliquée.
-- Boucle : répétition d'un même quadruplet description/inventaire/feedback/action
+- Boucle : répétition d'un même triplet description/inventaire/commande
   durant une partie. C'est un indicateur de revisite, parfois légitime.
 - Troncature : limite de 30 commandes atteinte sans fin naturelle.
 
@@ -86,3 +87,64 @@ suivie de consignes et ne démontre pas à lui seul une capacité à inventer un
 Le champ caché `policy_commands` reste réservé à l'expert. Une future ablation
 pourrait remplacer l'objectif détaillé par une formulation courte, mais elle
 changerait le benchmark et demanderait une nouvelle comparaison contrôlée.
+
+## Coût de préparation et reprise
+
+Les jeux sont compilés sur CPU dans deux processus séparés, avec des graines
+explicites. L'ordre de fin des tâches ne change pas le manifeste final, trié par
+graine. En cas d'arrêt, le programme réutilise les binaires valides dont l'UUID
+TextWorld correspond aux paramètres demandés. Il vérifie le checksum Z-machine et
+conserve les empreintes du binaire et du JSON. Cela ne modifie ni les splits ni les
+quêtes et évite de recommencer la compilation pendant un appel GPU.
+
+## Format de la sortie du SLM
+
+La commande exécutée est la première ligne non formatée de la réponse : les
+espaces de bord et les backticks sont retirés. Les métriques portent sur cette
+commande effectivement envoyée au jeu. Aucune commande n'est remplacée par une
+action de la liste admissible et aucun oracle ne corrige le modèle pendant ses parties.
+
+## Filtrage de l'expert réellement nécessaire
+
+Sur le jeu train `advanced-110084`, l'expert propose de déverrouiller `Canadian
+locker`, mais le parseur demande de choisir entre cet objet et `Canadian limited
+edition locker`. Le solveur répète la même commande sans avancer. Ce problème a
+été reproduit et sa trace est conservée dans `results/diagnostic_oracle_110084.jsonl`.
+
+La collecte conserve uniquement les épisodes experts gagnants. Chaque rejet est
+listé dans `collection-report.json`, avec le jeu, le split et une trace complète.
+Les effectifs **après filtrage** sont calculés dans `results/donnees.json`. Aucun
+jeu du test n'est supprimé pour cette raison : la baseline oracle peut donc échouer
+elle aussi. Ses résultats ne sont pas une garantie que tous les jeux sont faciles
+ou sans ambiguïté. Les exceptions d'exécution continuent à interrompre le pipeline.
+
+## Budget de contexte vérifié sur les données
+
+L'audit initial a trouvé deux observations train avancées dépassant 1024 tokens
+(`advanced-110005`, `advanced-110047`, au pas initial), à cause de la bannière ASCII
+imprimée au reset. Le pipeline retire d'abord les tours d'historique anciens. Si
+l'observation seule dépasse encore le budget, il retire uniquement la bannière
+composée de caractères graphiques et l'objectif dupliqué dans le feedback.
+L'objectif reste entièrement présent dans son propre champ, ainsi que la description
+et l'inventaire. Un texte narratif ou un avertissement n'est jamais supprimé par
+cette règle ; si le budget reste dépassé, une erreur explicite est levée.
+
+Le même traitement existe à l'entraînement et en inférence. Après correction,
+1179/1179 exemples train mixtes et 192/192 exemples validation sont encodables.
+Les 355 exemples train simples et 60 exemples validation simples sont exactement
+inchangés au niveau des tokens. Le premier checkpoint simple est donc conservé.
+Les audits avant et après sont dans `results/tokenisation-initiale.json` et
+`results/tokenisation.json`. Aucun résultat du test n'a servi à cette correction.
+
+## Vérification de l'indicateur de revisite
+
+Avant les évaluations, l'inspection des observations a montré que le feedback
+contient un compteur de coups. L'inclure dans la signature aurait masqué des
+allers-retours valides, car ce compteur change à chaque tour. La version 2 mesure
+les répétitions de description, inventaire et commande (sans tenir compte de la
+casse). Une revisite peut rester légitime : c'est un diagnostic, pas une preuve
+qu'une partie est irrécupérable.
+
+`scripts/recompute_metrics.py` recalcule ce diagnostic à partir des traces. Il
+vérifie que les victoires, nombres de coups et commandes non admissibles restent
+strictement inchangés. Les sorties du modèle ne sont pas rejouées ni sélectionnées.

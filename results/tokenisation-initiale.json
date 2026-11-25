@@ -1,0 +1,25 @@
+{
+  "mixed_train": {
+    "examples": 1179,
+    "encoded": 1177,
+    "max_length": 1024,
+    "errors": [
+      {
+        "game_id": "advanced-110005",
+        "step": 0,
+        "reason": "Observation trop longue : augmenter max_length"
+      },
+      {
+        "game_id": "advanced-110047",
+        "step": 0,
+        "reason": "Observation trop longue : augmenter max_length"
+      }
+    ]
+  },
+  "mixed_validation": {
+    "examples": 192,
+    "encoded": 192,
+    "max_length": 1020,
+    "errors": []
+  }
+}

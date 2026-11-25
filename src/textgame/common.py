@@ -41,18 +41,28 @@ def public_observation(state):
             for key in ("feedback", "description", "inventory", "objective")}
 
 
-def messages(history, observation, history_size=4):
+def messages(history, observation, history_size=4, compact_feedback=False):
     if history_size < 0:
         raise ValueError("history_size doit être positif ou nul")
     result = [{"role": "system", "content": SYSTEM}]
     for past in (history[-history_size:] if history_size else []):
         result += [{"role": "user", "content": format_observation(past["observation"])},
                    {"role": "assistant", "content": past["action"]}]
-    result.append({"role": "user", "content": format_observation(observation)})
+    result.append({"role": "user", "content": format_observation(observation, compact_feedback)})
     return result
 
 
-def format_observation(observation):
+def format_observation(observation, compact_feedback=False):
+    observation = dict(observation)
+    if compact_feedback:
+        # À reset, TextWorld imprime une longue bannière ASCII avant l'objectif.
+        # Ne retirer que ce décor et l'objectif dupliqué, déjà présent dans son champ.
+        objective = observation.get("objective", "")
+        feedback = observation.get("feedback", "")
+        if objective and objective in feedback:
+            prefix, _, remainder = feedback.partition(objective)
+            if prefix.strip() and set(prefix) <= set(" \t\r\n_\\|/$>"):
+                observation["feedback"] = remainder.lstrip()
     return "\n".join(f"{key.upper()}: {observation.get(key, '')}" for key in
                      ("objective", "description", "inventory", "feedback"))
 

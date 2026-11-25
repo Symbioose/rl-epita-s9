@@ -28,14 +28,19 @@ class LanguageAgent:
 
     def act(self, history, observation):
         prompt = messages(history, observation, self.history_size)
+        compacted = False
         while True:
             inputs = self.tokenizer.apply_chat_template(prompt, tokenize=True,
                 add_generation_prompt=True, return_tensors="pt", return_dict=True)
             if inputs["input_ids"].shape[-1] <= 1024:
                 break
-            if len(prompt) <= 2:
+            if len(prompt) > 2:
+                del prompt[1:3]
+            elif not compacted:
+                prompt = messages([], observation, 0, compact_feedback=True)
+                compacted = True
+            else:
                 raise ValueError("Observation trop longue pour le budget de contexte")
-            del prompt[1:3]
         inputs = inputs.to(self.model.device)
         with self.torch.inference_mode():
             output = self.model.generate(**inputs, do_sample=False, max_new_tokens=32,

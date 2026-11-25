@@ -5,7 +5,7 @@ import tempfile
 import unittest
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from textgame.common import messages, public_observation, digest, normalize_action
+from textgame.common import messages, public_observation, digest, normalize_action, format_observation
 from textgame.games import validate_manifest
 from textgame.tokenization import encode_example, pad_examples
 from textgame.evaluate import summarize, wilson, rollout
@@ -29,7 +29,7 @@ class TinyEnv:
                     admissible_commands=["take key"], score=0)
     def step(self, action):
         state = self.reset()
-        state.update(won=action == "take key", score=int(action == "take key"))
+        state.update(won=action.casefold() == "take key", score=int(action.casefold() == "take key"))
         return state, state["score"], state["won"]
     def close(self):
         self.closed = True
@@ -65,6 +65,19 @@ class PipelineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             encode_example(ToyTokenizer(), dict(history=[], observation={}, action="go"), max_length=2)
 
+    def test_only_decorative_banner_can_be_removed_for_context_budget(self):
+        observation = dict(objective="Take key.", description="A key.", inventory="empty",
+                           feedback=("\n _|$\\ />\n" * 2000) + "Take key.\nA key.")
+        example = dict(history=[], observation=observation, action="take key")
+        encoded = encode_example(ToyTokenizer(), example, max_length=512)
+        text = bytes(encoded["input_ids"]).decode()
+        self.assertIn("OBJECTIVE: Take key.", text)
+        self.assertIn("FEEDBACK: A key.", text)
+        self.assertNotIn("_|$", text)
+        self.assertIn("_|$", observation["feedback"])
+        narrative = dict(observation, feedback="Important warning. Take key.")
+        self.assertIn("Important warning.", format_observation(narrative, compact_feedback=True))
+
     def test_duplicate_games_and_modified_games(self):
         with tempfile.TemporaryDirectory() as folder:
             p = Path(folder) / "game.z8"
@@ -95,15 +108,22 @@ class PipelineTests(unittest.TestCase):
     def test_model_never_receives_oracle_or_candidates(self):
         env = TinyEnv()
         class Agent:
+            action = "take key"
             def act(self, history, observation):
                 assert "policy_commands" not in observation
                 assert "admissible_commands" not in observation
-                return "take key"
+                return self.action
         result, trace = rollout(dict(path="fake", game_id="fake", level="easy"), Agent(),
                                 env_factory=lambda *a, **k: env)
         self.assertTrue(result["won"])
         self.assertEqual(trace[0]["reward"], 1)
         self.assertTrue(env.closed)
+        Agent.action = "TAKE KEY"
+        result, trace = rollout(dict(path="fake", game_id="fake", level="easy"), Agent(),
+                                env_factory=lambda *a, **k: TinyEnv())
+        self.assertTrue(result["won"])
+        self.assertEqual(result["invalid"], 0)
+        self.assertEqual(trace[0]["action"], "TAKE KEY")
 
     def test_loop_and_truncation(self):
         class Agent:
@@ -118,6 +138,22 @@ class PipelineTests(unittest.TestCase):
     def test_empty_generation(self):
         self.assertEqual(normalize_action("\n  "), "")
         self.assertEqual(normalize_action("take key\nExplanation"), "take key")
+
+    def test_changing_turn_counter_does_not_hide_revisits(self):
+        class CounterEnv(TinyEnv):
+            turn = 0
+            def step(self, action):
+                self.turn += 1
+                state = self.reset()
+                state["feedback"] = f"Current turn: {self.turn}"
+                return state, 0, False
+        class Agent:
+            def act(self, *args):
+                return "look"
+        result, _ = rollout(dict(path="fake", game_id="fake", level="easy"), Agent(),
+                            max_steps=4, env_factory=lambda *a, **k: CounterEnv())
+        self.assertTrue(result["loop"])
+        self.assertEqual(result["invalid"], 0)
 
 
 if __name__ == "__main__":

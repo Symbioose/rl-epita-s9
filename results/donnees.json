@@ -1,0 +1,146 @@
+{
+  "games_by_level_split": {
+    "easy/train": 120,
+    "easy/validation": 20,
+    "easy/test": 40,
+    "advanced/train": 120,
+    "advanced/validation": 20,
+    "advanced/test": 40
+  },
+  "datasets": {
+    "advanced_train": {
+      "examples": 824,
+      "games": 119,
+      "generated_games": 120,
+      "rejected_games": 1,
+      "mean_expert_steps": 6.92436974789916,
+      "min_expert_steps": 2,
+      "max_expert_steps": 7,
+      "action_verbs": {
+        "open": 130,
+        "take": 163,
+        "go": 308,
+        "unlock": 68,
+        "insert": 50,
+        "close": 47,
+        "lock": 47,
+        "drop": 4,
+        "eat": 2,
+        "put": 5
+      }
+    },
+    "advanced_validation": {
+      "examples": 132,
+      "games": 20,
+      "generated_games": 20,
+      "rejected_games": 0,
+      "mean_expert_steps": 6.6,
+      "min_expert_steps": 2,
+      "max_expert_steps": 7,
+      "action_verbs": {
+        "go": 49,
+        "take": 27,
+        "unlock": 11,
+        "open": 18,
+        "insert": 6,
+        "drop": 1,
+        "eat": 2,
+        "close": 9,
+        "lock": 9
+      }
+    },
+    "easy_train": {
+      "examples": 355,
+      "games": 120,
+      "generated_games": 120,
+      "rejected_games": 0,
+      "mean_expert_steps": 2.9583333333333335,
+      "min_expert_steps": 1,
+      "max_expert_steps": 3,
+      "action_verbs": {
+        "go": 121,
+        "close": 10,
+        "lock": 19,
+        "take": 101,
+        "drop": 14,
+        "eat": 14,
+        "unlock": 26,
+        "open": 30,
+        "put": 12,
+        "insert": 8
+      }
+    },
+    "easy_validation": {
+      "examples": 60,
+      "games": 20,
+      "generated_games": 20,
+      "rejected_games": 0,
+      "mean_expert_steps": 3,
+      "min_expert_steps": 3,
+      "max_expert_steps": 3,
+      "action_verbs": {
+        "go": 24,
+        "take": 15,
+        "drop": 2,
+        "open": 7,
+        "close": 1,
+        "put": 4,
+        "unlock": 3,
+        "eat": 3,
+        "insert": 1
+      }
+    },
+    "mixed_train": {
+      "examples": 1179,
+      "games": 239,
+      "generated_games": 240,
+      "rejected_games": 1,
+      "mean_expert_steps": 4.933054393305439,
+      "min_expert_steps": 1,
+      "max_expert_steps": 7,
+      "action_verbs": {
+        "go": 429,
+        "close": 57,
+        "lock": 66,
+        "take": 264,
+        "drop": 18,
+        "eat": 16,
+        "unlock": 94,
+        "open": 160,
+        "put": 17,
+        "insert": 58
+      }
+    },
+    "mixed_validation": {
+      "examples": 192,
+      "games": 40,
+      "generated_games": 40,
+      "rejected_games": 0,
+      "mean_expert_steps": 4.8,
+      "min_expert_steps": 2,
+      "max_expert_steps": 7,
+      "action_verbs": {
+        "go": 73,
+        "take": 42,
+        "drop": 3,
+        "open": 25,
+        "close": 10,
+        "put": 4,
+        "unlock": 14,
+        "eat": 5,
+        "insert": 7,
+        "lock": 9
+      }
+    }
+  },
+  "rejected_expert_games": [
+    {
+      "game_id": "advanced-110084",
+      "level": "advanced",
+      "split": "train",
+      "steps": 100,
+      "feedback": "\nWhich do you mean, the Canadian locker or the Canadian limited edition locker?\n\n>                                                                                                                                -= Dish-Pit =-0/1",
+      "reason": "oracle_not_won"
+    }
+  ]
+}

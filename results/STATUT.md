@@ -1,4 +1,16 @@
-# État réel au 25 novembre 2026
+# État du projet au 25 novembre 2026
+
+## État actuel
+
+Le dépôt est publié sur https://github.com/Symbioose/rl-epita-s9.
+Les dépendances sont installées et 14 tests passent dans le conteneur Linux Modal,
+y compris le test de compilation et partie experte (voir tests-linux.txt).
+TextWorld 1.7.0 exige le format .z8 : cette correction est appliquée.
+Le tokenizer Qwen réel confirme les cibles action + fin de message, prompt masqué.
+La génération complète des jeux est en cours sur Modal ; entraînement et évaluations
+ne sont pas encore terminés. La présentation PDF 16:9 a été rendue et relue.
+
+## Historique des blocages initiaux (résolus ou contournés)
 
 ## Vérifications exécutées
 
@@ -15,7 +27,8 @@ pas TextWorld et ses succès ne sont pas des performances du modèle.
 - `python -m pip install textworld ...` : échec de résolution DNS de pypi.org.
 - `curl https://pypi.org/...` : même erreur de résolution DNS.
 - Les poids Qwen ne sont pas présents localement. Aucun entraînement lancé.
-- Modal n'est pas installé. Aucun crédit GPU consommé par cette session.
+- Initialement, Modal n’était pas installé et aucun crédit n’avait été consommé.
+  Le calcul distant est maintenant lancé, avec un seul conteneur T4 plafonné à deux heures.
 - La création du deck dans Spaces est refusée (`page_age_restricted`). Le rendu
   fourni est donc un fichier HTML local autonome, sans appel à ce service.
 

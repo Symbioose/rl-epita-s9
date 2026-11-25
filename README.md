@@ -6,11 +6,11 @@ capacité à accomplir une quête textuelle sur des jeux jamais vus ?**
 
 ## État réel du rendu
 
-Le code, le protocole, les tests unitaires et les supports pédagogiques sont écrits.
-**Le fine-tuning et les parties TextWorld n'ont pas été exécutés dans cette session** :
-le réseau local ne résout pas `pypi.org`, les dépendances ne peuvent pas être installées.
-Aucun checkpoint entraîné ni résultat de jeu n'est fourni. Ne pas présenter les
-expériences prévues comme réalisées. Voir [l'état des vérifications](results/STATUT.md).
+L'intégration Linux est validée : **14 tests réussis**, dont la compilation d'un
+vrai jeu TextWorld et sa résolution par l'oracle. Le tokenizer Qwen réel et le
+masquage de la loss ont aussi été contrôlés. La génération des jeux et les
+expériences Modal sont en cours. Les performances seront publiées uniquement
+après récupération des rollouts complets. Voir [l'état des vérifications](results/STATUT.md).
 
 ## Lire et présenter
 

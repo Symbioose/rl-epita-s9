@@ -92,3 +92,14 @@ DAgger serait une extension : faire jouer l'agent sur les jeux train, demander
 l'action de l'expert sur ses états visités, ajouter ces exemples, puis réentraîner.
 Cette technique n'est pas implémentée ici. L'approfondissement retenu est la
 comparaison de stratégies de prompt, avec et sans historique, sur les deux niveaux.
+
+## Exemple réel vérifié pendant la préparation
+
+Le jeu d'entraînement `easy-10000` a été compilé sur Linux, puis joué localement
+avec l'expert. La séquence `go south`, `close safe`, `lock safe with keycard`
+aboutit à `won=True`. La trace complète est dans
+`results/exemple_expert_train_10000.jsonl`. **C'est l'expert, pas le SLM.**
+L'objectif public de ce jeu décrit déjà ces trois étapes. C'est une limite à
+prendre en compte avant de parler de « planification ». Le premier prompt encodé
+avec le tokenizer Qwen réel compte 631 tokens, dont le prompt est masqué pour la loss.
+Cette mesure concerne un seul exemple, pas la distribution complète des données.

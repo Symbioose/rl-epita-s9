@@ -4,6 +4,7 @@ from .common import messages
 
 def encode_example(tokenizer, example, history_size=4, max_length=1024):
     prompt_messages = messages(example["history"], example["observation"], history_size)
+    compacted = False
     # Retirer les tours les plus anciens avant de tronquer un contexte.
     while True:
         prefix = tokenizer.apply_chat_template(prompt_messages, tokenize=True,
@@ -17,6 +18,9 @@ def encode_example(tokenizer, example, history_size=4, max_length=1024):
             break
         if len(prompt_messages) > 2:
             del prompt_messages[1:3]
+        elif not compacted:
+            prompt_messages = messages([], example["observation"], 0, compact_feedback=True)
+            compacted = True
         else:
             # Ne jamais perdre silencieusement l'objectif ou la cible.
             raise ValueError("Observation trop longue : augmenter max_length")
