@@ -14,8 +14,9 @@ report:
 figures:
 	python scripts/plot_results.py
 slides:
-	python presentation/build.py --figure results/figures/reussite.png
+	python presentation/build.py
 pdf:
 	python scripts/export_pdf.py
+	python scripts/export_pdf.py --source presentation/annexes.html --output presentation/annexes.pdf
 package:
 	python scripts/package_results.py

@@ -17,7 +17,8 @@ import modal
 app = modal.App("textgames-student")
 volume = modal.Volume.from_name("textgames-student", create_if_missing=True)
 project_file = Path(__file__).with_name("pyproject.toml") if modal.is_local() else Path("/project/pyproject.toml")
-requirements = tomllib.loads(project_file.read_text())["project"]["dependencies"]
+project_config = tomllib.loads(project_file.read_text())["project"]
+requirements = project_config["dependencies"] + project_config["optional-dependencies"]["plots"]
 image = (modal.Image.debian_slim(python_version="3.11")
     .apt_install("build-essential", "git", "curl", "libffi-dev")
     # Installer les dépendances avant le code permet de réutiliser cette couche.

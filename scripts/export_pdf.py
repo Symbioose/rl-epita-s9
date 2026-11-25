@@ -22,7 +22,15 @@ def export(source, output):
     aside,nav {display:none!important}
     '''
     source = Path(source).resolve()
-    text = source.read_text(encoding="utf-8").replace("</head>", f"<style>{css}</style></head>")
+    text = source.read_text(encoding="utf-8")
+    if 'content="visual-v2"' in text:
+        css = """@page{size:1280px 720px;margin:0}
+        html,body{margin:0;padding:0}#deck{position:static!important;left:0!important;top:0!important;
+        transform:none!important;width:1280px;height:auto}
+        .slide,.slide.active{display:block!important;position:relative;width:1280px;height:720px;
+        break-after:page;padding:0!important;margin:0!important}
+        .slide>img{width:1280px;height:720px;display:block}aside,nav{display:none!important}"""
+    text = text.replace("</head>", f"<style>{css}</style></head>")
     HTML(string=text, base_url=str(source.parent)).write_pdf(output)
     print(f"PDF : {output}")
 

@@ -29,7 +29,8 @@ pour consulter les résultats. Voir [les vérifications](results/STATUT.md).
 
 ## Lire et présenter
 
-- [Présentation PDF — 17 diapositives](presentation/presentation.pdf).
+- [Présentation PDF — 10 slides visuelles](presentation/presentation.pdf).
+- [Annexes pour les questions](presentation/annexes.pdf) : paramètres, métriques et références.
 - [Présentation hors ligne](presentation/index.html) : ouvrir dans un navigateur,
   flèches pour avancer, `N` pour les notes, `F` pour le plein écran. Impression PDF
   possible via le navigateur. Les notes détaillent les explications à donner à l’oral.
@@ -48,7 +49,7 @@ sur Apple Silicon. Il faut un accès Internet pour les paquets et les poids publ
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[cloud]'
+python -m pip install -e '.[cloud,plots,pdf]'
 python -m unittest discover -s tests -v
 ```
 

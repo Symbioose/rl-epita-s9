@@ -3,7 +3,8 @@ WORKDIR /project
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential git curl libffi-dev && rm -rf /var/lib/apt/lists/*
 COPY pyproject.toml .
 COPY src src
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir ".[plots]"
 COPY scripts scripts
 COPY tests tests
+COPY presentation presentation
 CMD ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]

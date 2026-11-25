@@ -1,6 +1,6 @@
 # Soutenance : comprendre avant de réciter
 
-Durée visée : 12 minutes, puis questions. La présentation HTML possède des notes
+Durée visée : 12 minutes sur 10 slides visuelles, puis questions avec les 3 annexes. La présentation HTML possède des notes
 par diapositive (`N`). Répartir les parties entre membres et permettre à chacun
 d'expliquer le code du prompt, le masque et une trace d'échec.
 
