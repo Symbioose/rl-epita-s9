@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "textgame-student"
+version = "0.1.0"
+description = "Fine-tuning LoRA pédagogique pour TextWorld"
+requires-python = ">=3.10,<3.13"
+dependencies = ["textworld==1.6.2", "torch==2.5.1", "transformers==4.46.3", "peft==0.13.2", "accelerate==1.1.1", "numpy<2", "sentencepiece>=0.2,<0.3"]
+
+[project.optional-dependencies]
+cloud = ["modal>=1.0,<2"]
+plots = ["matplotlib>=3.8,<4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
