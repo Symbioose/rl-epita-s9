@@ -2,7 +2,7 @@
 
 ## Vérifications exécutées
 
-- `python3 -m unittest discover -s tests -v` : 11 tests passent, 1 test d'intégration ignoré.
+- `python3 -m unittest discover -s tests -v` : 13 tests passent, 1 test d'intégration ignoré.
 - `python3 -m compileall -q src scripts modal_app.py` : succès.
 - `python3 scripts/report.py` : rapport sans chiffres fictifs en l'absence de logs.
 
@@ -43,3 +43,20 @@ provenant des logs. Conserver une copie de cet état pour la traçabilité.
   à effectuer ; aucun dépôt distant n'a été vérifié ou modifié.
 - Workflow GitHub Actions fourni pour lancer le test d'intégration Linux après
   publication. Il n'a pas tourné et ne télécharge aucun modèle pour le training.
+
+## Reprise de la tâche
+
+Le réseau local et GitHub restent inaccessibles par DNS. Docker est installé mais
+son daemon est inaccessible. Aucun paquet ML ni poids Qwen n'a été trouvé dans
+les caches vérifiés. Le runner complet a été exécuté : il s'arrête explicitement
+sur l'absence de textworld, torch, transformers, peft et accelerate.
+
+Corrections vérifiées : reprise des évaluations sans rejouer les jeux terminés,
+refus de mélanger des configurations et poids différents, suppression des résumés
+obsolètes, écritures atomiques des JSON/JSONL. Deux tests supplémentaires passent.
+La présentation peut maintenant importer les mesures complètes de summary.json.
+Son rendu visuel et les expériences réelles restent non vérifiés.
+
+Une intégration GitHub a été découverte mais n'est pas installée/connectée. Elle
+pourrait permettre la publication après connexion ; aucun accès à Modal n'a été
+trouvé parmi les intégrations proposées. Aucun secret n'a été utilisé ou publié.

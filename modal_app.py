@@ -20,6 +20,8 @@ image = (modal.Image.debian_slim(python_version="3.11")
     .add_local_dir("src", "/project/src", copy=True)
     .run_commands("pip install /project")
     .add_local_dir("scripts", "/project/scripts", copy=True)
+    .add_local_dir("tests", "/project/tests", copy=True)
+    .add_local_dir("presentation", "/project/presentation", copy=True)
     .env({"HF_HOME": "/storage/hf", "PYTHONPATH": "/project/src"}))
 
 
@@ -50,13 +52,29 @@ def gpu_phase(phase: str, experiment: str = "", level: str = ""):
     execute(phase, 1, experiment, level)
 
 
+@app.function(image=image, volumes={"/storage": volume}, gpu="T4", timeout=7200,
+              retries=0, max_containers=1, cpu=2, memory=8192)
+def full_project():
+    import os
+    import subprocess
+    os.chdir("/storage")
+    try:
+        subprocess.run(["python", "/project/scripts/finish_project.py"], check=True)
+    finally:
+        volume.commit()
+
+
 @app.local_entrypoint()
 def main(phase: str = "prepare", scale: float = 1.0, experiment: str = "", level: str = ""):
-    if phase not in {"prepare", "train", "validation", "test"}:
+    if phase not in {"all", "prepare", "train", "validation", "test"}:
         raise ValueError("Phase inconnue")
     if not 0 < scale <= 1:
         raise ValueError("scale doit appartenir à ]0,1]")
-    if phase == "prepare":
+    if phase == "all":
+        if scale != 1 or experiment or level:
+            raise ValueError("La phase all exécute le protocole complet uniquement")
+        full_project.remote()
+    elif phase == "prepare":
         prepare.remote(scale)
     else:
         gpu_phase.remote(phase, experiment, level)

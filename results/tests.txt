@@ -9,9 +9,11 @@ test_model_never_receives_oracle_or_candidates (test_pipeline.PipelineTests.test
 test_observation_whitelist (test_pipeline.PipelineTests.test_observation_whitelist) ... ok
 test_padding_never_contributes_to_loss (test_pipeline.PipelineTests.test_padding_never_contributes_to_loss) ... ok
 test_wilson_boundaries (test_pipeline.PipelineTests.test_wilson_boundaries) ... ok
+test_output_without_provenance_is_rejected (test_resume.ResumeTests.test_output_without_provenance_is_rejected) ... ok
+test_resume_only_pending_games_and_reject_changed_config (test_resume.ResumeTests.test_resume_only_pending_games_and_reject_changed_config) ... ok
 test_compiled_game_has_text_and_oracle_wins (test_textworld_integration.TextWorldIntegration.test_compiled_game_has_text_and_oracle_wins) ... skipped 'TextWorld non installé'
 
 ----------------------------------------------------------------------
-Ran 12 tests in 0.001s
+Ran 14 tests in 0.007s
 
 OK (skipped=1)

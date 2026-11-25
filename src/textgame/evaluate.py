@@ -1,10 +1,12 @@
 """Rollouts, métriques au niveau des jeux et traces d'échec auditables."""
 import argparse
+import json
+import hashlib
 import math
 import statistics
 import time
 from pathlib import Path
-from .common import read_jsonl, write_jsonl, save_json, public_observation
+from .common import read_jsonl, write_jsonl, save_json, public_observation, digest
 from .games import start_game, validate_manifest
 from .agents import RandomAgent, LanguageAgent
 
@@ -84,18 +86,47 @@ def evaluate(manifest="artifacts/manifest.jsonl", output="artifacts/eval/base_ea
     selected = [g for g in games if g["level"] == level and g["split"] == split]
     if not selected:
         raise ValueError("Aucun jeu pour ce niveau et ce split")
+    output = Path(output)
+    config = dict(level=level, split=split, kind=kind, adapter=adapter,
+                  history_size=history_size, max_steps=max_steps, seed=seed,
+                  manifest_sha256=digest(manifest))
+    if adapter:
+        weights = Path(adapter) / "adapter_model.safetensors"
+        config["adapter_sha256"] = digest(weights)
+    config_path = output / "run.json"
+    if config_path.exists():
+        if json.loads(config_path.read_text()) != config:
+            raise ValueError("Le dossier contient une autre expérience : choisir un nouvel output")
+    elif (output / "episodes.jsonl").exists() or (output / "summary.json").exists():
+        raise ValueError("Résultats sans provenance : choisir un nouvel output")
+    save_json(config_path, config)
+    # Reprise uniquement avec même manifeste, mêmes poids et même configuration.
+    episodes_path = output / "episodes.jsonl"
+    episodes = read_jsonl(episodes_path) if episodes_path.exists() else []
+    completed_ids = [e["game_id"] for e in episodes]
+    if len(completed_ids) != len(set(completed_ids)) or not set(completed_ids) <= {g["game_id"] for g in selected}:
+        raise ValueError("Épisodes incohérents avec le manifeste")
+    summary_path = output / "summary.json"
+    # Un résumé n'est publié qu'après complétion de TOUS les jeux sélectionnés.
+    summary_path.unlink(missing_ok=True)
+    if len(episodes) == len(selected):
+        save_json(summary_path, dict(config=config, complete=True, metrics=summarize(episodes)))
+        return summarize(episodes)
     agent = RandomAgent(seed) if kind == "random" else (
         LanguageAgent(adapter=adapter, history_size=history_size) if kind == "model" else None)
-    episodes = []
     for game in selected:
+        if game["game_id"] in completed_ids:
+            continue
+        if kind == "random":
+            # Une RNG par jeu garantit la même trajectoire après interruption.
+            game_seed = int(hashlib.sha256(f"{seed}:{game['game_id']}".encode()).hexdigest()[:16], 16)
+            agent = RandomAgent(game_seed)
         episode, trace = rollout(game, agent, kind, max_steps)
         episodes.append(episode)
         write_jsonl(Path(output) / "traces" / f"{game['game_id']}.jsonl", trace)
         # Sauvegarder à chaque épisode pour conserver les résultats si interruption.
         write_jsonl(Path(output) / "episodes.jsonl", episodes)
-    save_json(Path(output) / "summary.json", dict(config=dict(level=level, split=split,
-        kind=kind, adapter=adapter, history_size=history_size, max_steps=max_steps, seed=seed),
-        metrics=summarize(episodes)))
+    save_json(summary_path, dict(config=config, complete=True, metrics=summarize(episodes)))
     return summarize(episodes)
 
 

@@ -1,4 +1,5 @@
 """Construit un diaporama HTML autonome, avec notes orales et impression."""
+import argparse
 from html import escape
 from pathlib import Path
 import json
@@ -26,7 +27,7 @@ SLIDES = [
  "6:40–7:20. Technique avancée retenue : comparaison de stratégies de prompt. Hypothèse : l'historique aide à garder une progression et évite certaines répétitions. Il peut aussi distraire ou augmenter le coût. Le modèle est entraîné avec historique 4 : historique 0 crée un décalage d'inférence. Aucun résultat de cette comparaison n'est encore disponible."),
 ("L'évaluation fait jouer l'agent", "La loss ne suffit pas", "Quêtes gagnées + IC 95 %\nCoups sur tous les épisodes et sur les réussites\nActions invalides, boucles, troncatures",
  "7:20–8:10. IC de Wilson sur les jeux. Il ne couvre pas la variation entre réentraînements. Avec 40 jeux, une victoire vaut 2,5 points. Invalidité = absence dans les actions admissibles, avec exceptions look/inventory : des synonymes peuvent être mal comptés. Une revisite peut être utile, donc l'indicateur boucle demande une lecture humaine."),
-("Résultats : mesures non disponibles", "État vérifié du projet", "11 tests unitaires réussis\nIntégration TextWorld non exécutée\nAucun entraînement ni taux de victoire mesuré",
+("Résultats : mesures non disponibles", "État vérifié du projet", "13 tests unitaires réussis\nIntégration TextWorld non exécutée\nAucun entraînement ni taux de victoire mesuré",
  "8:10–9:00. Expliquer le blocage précis : résolution DNS de pypi.org refusée dans l'environnement local, dépendances absentes. Les tests unitaires valident les masques, les métriques et les protections de données ; ils ne remplacent pas un test du modèle. Le rapport sera calculé par scripts/report.py uniquement à partir des logs réels."),
 ("Comprendre un échec", "Une trace complète par partie", "Commande impossible ?\nSous-objectif oublié ?\nÉtat visité en boucle ?",
  "9:00–9:45. Ce sont des catégories d'analyse prévues, pas des échecs déjà observés. Lire le premier écart et le feedback du jeu. Ne pas appeler toute action invalide hallucination : le modèle peut simplement utiliser un synonyme ou oublier une précondition. Le BC voit les états experts et peut manquer de couverture lorsqu'il s'égare."),
@@ -46,11 +47,37 @@ CSS = '''
 aside{display:none;position:fixed;bottom:7vh;right:2vw;left:2vw;background:#eef5f8;color:#13202c;padding:20px 26px;border:2px solid #74dece;font-size:18px;line-height:1.5;z-index:3;max-height:34vh;overflow:auto}.notes aside{display:block}button{border:0;background:transparent;color:#aabdc8;font-size:20px;cursor:pointer;padding:10px}nav{position:fixed;bottom:0;right:2vw;z-index:5}.sr{position:absolute;width:1px;height:1px;overflow:hidden}
 @media print{@page{size:landscape;margin:0}body{overflow:visible;background:#101c29;-webkit-print-color-adjust:exact;print-color-adjust:exact}.slide,.slide.active{display:flex;min-height:100vh;height:100vh;break-after:page;padding:7vh 9vw}aside,nav{display:none!important}h1{font-size:42px}.body{font-size:26px}.kicker{font-size:20px}}
 '''
+parser = argparse.ArgumentParser()
+parser.add_argument("--results", default="artifacts/eval/test")
+parser.add_argument("--output", default=str(Path(__file__).parent))
+args = parser.parse_args()
+output = Path(args.output)
+output.mkdir(parents=True, exist_ok=True)
+measured = []
+for level in ["easy", "advanced"]:
+    rows = []
+    for name in ["oracle", "random", "base", "lora_easy", "lora_easy_h0", "lora_mixed"]:
+        path = Path(args.results) / f"{name}_{level}" / "summary.json"
+        if not path.exists():
+            continue
+        summary = json.loads(path.read_text())
+        if not summary.get("complete"):
+            continue
+        m = summary["metrics"]
+        rows.append(f"{name} : {m['success_rate']:.0%} gagnés, {m['mean_steps_all']:.1f} coups")
+    if rows:
+        measured.append((f"Résultats mesurés : {level}", "Réussite et coups moyens sur tous les épisodes",
+            "\n".join(rows), "Mesures issues de summary.json. Nombre de jeux, IC Wilson 95 %, invalidité et boucles dans resultats.md. Une graine de fine-tuning. Baselines oracle et random : information privilégiée. Une ligne absente désigne une condition non terminée."))
+if measured:
+    SLIDES[11:12] = measured
+    SLIDES = [(t,k,b,n) for t,k,b,n in SLIDES if t != "Ce qu'il reste à mesurer"]
+    SLIDES[0] = (SLIDES[0][0], SLIDES[0][1], SLIDES[0][2],
+        "0:00–0:40. Présenter la question et le protocole. Les diapositives de résultats ne contiennent que les conditions terminées. Vérifier que les douze conditions sont présentes avant d'annoncer une comparaison complète.")
 parts = []
 for i, (title, kicker, body, notes) in enumerate(SLIDES):
     parts.append(f'<section class="slide{" active" if i == 0 else ""}" aria-label="Diapositive {i+1}"><p class="kicker">{escape(kicker)}</p><h1>{escape(title)}</h1><p class="body">{escape(body)}</p><div class="foot"><span>TextWorld · Projet RL EPITA</span><span>{i+1:02} / {len(SLIDES)}</span></div><aside>{escape(notes)}</aside></section>')
 script = '''let current=0;const slides=[...document.querySelectorAll('.slide')];function show(i){current=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle('active',j===current));location.hash=current+1;}function move(d){show(current+d)}function notes(){document.body.classList.toggle('notes')}function full(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();move(1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();move(-1)}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='n')notes();if(e.key.toLowerCase()==='f')full()});show((parseInt(location.hash.slice(1))||1)-1);'''
 html = '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TextWorld et LoRA — Projet RL</title><style>'+CSS+'</style></head><body>'+''.join(parts)+'<nav aria-label="Navigation"><button onclick="move(-1)" aria-label="Précédente">←</button><button onclick="move(1)" aria-label="Suivante">→</button><button onclick="notes()">Notes</button><button onclick="full()">Plein écran</button></nav><script>'+script+'</script></body></html>'
-Path(__file__).with_name('index.html').write_text(html, encoding='utf-8')
-Path(__file__).with_name('notes.md').write_text('\n\n'.join(f'## {i+1}. {t}\n\n{n}' for i,(t,k,b,n) in enumerate(SLIDES)), encoding='utf-8')
+(output / 'index.html').write_text(html, encoding='utf-8')
+(output / 'notes.md').write_text('\n\n'.join(f'## {i+1}. {t}\n\n{n}' for i,(t,k,b,n) in enumerate(SLIDES)), encoding='utf-8')
 print(f'{len(SLIDES)} diapositives générées')

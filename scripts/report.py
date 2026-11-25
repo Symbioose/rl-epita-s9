@@ -11,6 +11,8 @@ def report(root, output):
     rows = []
     for path in sorted(Path(root).glob("*/summary.json")):
         summary = json.loads(path.read_text())
+        if not summary.get("complete"):
+            continue
         m = summary["metrics"]
         lo, hi = m["success_ci95"]
         steps = "—" if m["mean_steps_success"] is None else f'{m["mean_steps_success"]:.1f}'

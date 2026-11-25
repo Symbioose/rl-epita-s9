@@ -48,6 +48,31 @@ Les versions principales sont fixées dans `pyproject.toml`. Les versions réell
 utilisées et la révision du modèle sont consignées dans `training.json` après training.
 Les dépendances transitives et l'image système ne sont pas verrouillées par digest.
 
+## Exécution automatique de tout le protocole
+
+Après installation des dépendances, une seule commande enchaîne le test réel,
+la collecte, les deux fine-tunings, les 24 évaluations (validation puis test),
+le rapport et les diapositives contenant les mesures disponibles :
+
+```bash
+python scripts/finish_project.py
+# Ou sur Modal, avec GPU T4 et un timeout global de deux heures pour cet appel :
+modal run modal_app.py --phase all
+```
+
+Les livrables calculés arrivent dans `artifacts/delivery/`. Les journaux détaillés
+sont dans `artifacts/execution/`. En cas d'échec, l'exécution s'arrête et annonce
+l'étape en échec ; aucun statut « terminé » n'est produit. Une relance reprend
+les évaluations dont la provenance correspond exactement aux jeux et aux poids.
+Les modèles ayant un entraînement complet et les mêmes données sont réutilisés.
+Les fine-tunings interrompus sont recommencés. Ne pas lancer plusieurs commandes
+Modal simultanément ni relancer sans consulter le solde restant.
+
+La phase `all` conserve une T4 pendant toute sa durée (y compris génération et
+tests), contrairement aux phases séparées plus économes. Le timeout de deux
+heures concerne un appel, pas un plafond de dépenses pour le compte. La durée
+réelle de ce protocole n'a pas pu être mesurée dans cette session.
+
 ## Exécution locale complète
 
 ```bash
