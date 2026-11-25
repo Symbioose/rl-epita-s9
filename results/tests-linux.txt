@@ -1,6 +1,7 @@
 test_execution_errors_are_not_silently_filtered (test_collection.CollectionTests.test_execution_errors_are_not_silently_filtered) ... ok
 test_reject_losing_episode_and_never_collect_test (test_collection.CollectionTests.test_reject_losing_episode_and_never_collect_test) ... ok
 test_action_only_loss (test_pipeline.PipelineTests.test_action_only_loss) ... ok
+test_changing_turn_counter_does_not_hide_revisits (test_pipeline.PipelineTests.test_changing_turn_counter_does_not_hide_revisits) ... ok
 test_duplicate_games_and_modified_games (test_pipeline.PipelineTests.test_duplicate_games_and_modified_games) ... ok
 test_empty_generation (test_pipeline.PipelineTests.test_empty_generation) ... ok
 test_history_zero_and_four (test_pipeline.PipelineTests.test_history_zero_and_four) ... ok
@@ -9,6 +10,7 @@ test_loop_and_truncation (test_pipeline.PipelineTests.test_loop_and_truncation) 
 test_metrics_weight_invalid_by_actions (test_pipeline.PipelineTests.test_metrics_weight_invalid_by_actions) ... ok
 test_model_never_receives_oracle_or_candidates (test_pipeline.PipelineTests.test_model_never_receives_oracle_or_candidates) ... ok
 test_observation_whitelist (test_pipeline.PipelineTests.test_observation_whitelist) ... ok
+test_only_decorative_banner_can_be_removed_for_context_budget (test_pipeline.PipelineTests.test_only_decorative_banner_can_be_removed_for_context_budget) ... ok
 test_padding_never_contributes_to_loss (test_pipeline.PipelineTests.test_padding_never_contributes_to_loss) ... ok
 test_wilson_boundaries (test_pipeline.PipelineTests.test_wilson_boundaries) ... ok
 test_output_without_provenance_is_rejected (test_resume.ResumeTests.test_output_without_provenance_is_rejected) ... ok
@@ -16,6 +18,6 @@ test_resume_only_pending_games_and_reject_changed_config (test_resume.ResumeTest
 test_compiled_game_has_text_and_oracle_wins (test_textworld_integration.TextWorldIntegration.test_compiled_game_has_text_and_oracle_wins) ... ok
 
 ----------------------------------------------------------------------
-Ran 16 tests in 6.538s
+Ran 18 tests in 9.544s
 
 OK

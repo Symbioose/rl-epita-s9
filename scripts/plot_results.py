@@ -37,7 +37,7 @@ def plot(root, output):
         ax.set(title="Quêtes simples" if level == "easy" else "Quêtes avancées", ylim=(0, 112))
         ax.set_xticks(range(len(names)), labels, rotation=40, ha="right")
         ax.spines[["top", "right"]].set_visible(False)
-    axes[0].set_ylabel("Quêtes gagnées (%) ; IC de Wilson à 95 %")
+    axes[0].set_ylabel("Quêtes gagnées (%)")
     fig.suptitle("Évaluation sur jeux non vus — * baselines avec information privilégiée")
     if not found:
         plt.close(fig)

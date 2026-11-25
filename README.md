@@ -4,19 +4,37 @@ Projet étudiant de reinforcement learning et d'apprentissage par imitation.
 **Question : fine-tuner un modèle de 0,5 milliard de paramètres améliore-t-il sa
 capacité à accomplir une quête textuelle sur des jeux jamais vus ?**
 
-## État réel du rendu
+## Résultats réellement mesurés
 
-L'intégration Linux est validée : **14 tests réussis**, dont la compilation d'un
-vrai jeu TextWorld et sa résolution par l'oracle. Le tokenizer Qwen réel et le
-masquage de la loss ont aussi été contrôlés. La génération des jeux et les
-expériences Modal sont en cours. Les performances seront publiées uniquement
-après récupération des rollouts complets. Voir [l'état des vérifications](results/STATUT.md).
+**Deux fine-tunings terminés, 360 jeux compilés, 720 épisodes d’évaluation et
+18 tests réussis sous Linux**, dont un test d’intégration TextWorld réel.
+
+| Agent | Test simple | Test avancé |
+|---|---:|---:|
+| Qwen initial | 0/40 (0.0 %) | 0/40 (0.0 %) |
+| LoRA simple | 33/40 (82.5 %) | 4/40 (10.0 %) |
+| LoRA simple, historique retiré | 1/40 (2.5 %) | 0/40 (0.0 %) |
+| LoRA mixte | 39/40 (97.5 %) | 31/40 (77.5 %) |
+
+Voir le [tableau complet avec IC, coups et invalidité](results/rapport.md) et le
+[bilan expliqué](results/BILAN.md). Une seule graine d’entraînement ; le modèle
+mixte reçoit davantage de données et de mises à jour. L’ablation sans historique
+modifie les prompts d’un modèle entraîné avec historique. Ces limites empêchent
+d’attribuer les écarts à une cause unique ou à un raisonnement général.
+
+Les **données, jeux compilés, deux adaptateurs et traces réelles** sont livrés dans
+[reproducibility/experiences.tar.gz](reproducibility/experiences.tar.gz), avec
+SHA256. Extraire à la racine pour retrouver `artifacts/` ; aucun GPU n’est nécessaire
+pour consulter les résultats. Voir [les vérifications](results/STATUT.md).
 
 ## Lire et présenter
 
+- [Présentation PDF — 17 diapositives](presentation/presentation.pdf).
 - [Présentation hors ligne](presentation/index.html) : ouvrir dans un navigateur,
   flèches pour avancer, `N` pour les notes, `F` pour le plein écran. Impression PDF
-  possible via le navigateur. Les diapositives de résultats signalent les mesures absentes.
+  possible via le navigateur. Les notes détaillent les explications à donner à l’oral.
+- [Démo enregistrée](results/DEMO.md) : une réussite et des limites relisibles sans GPU.
+- [Reproduire les mesures](docs/REPRODUIRE.md) : archive, vérification et relance.
 - [Comprendre le projet](docs/COMPRENDRE.md) : notions, loss et LoRA expliquées.
 - [Protocole expérimental](docs/EXPERIENCES.md) : hypothèses, comparaisons et biais.
 - [Préparer les questions](docs/ORAL.md) : réponses, liens avec le cours et démonstration.
@@ -70,8 +88,7 @@ Modal simultanément ni relancer sans consulter le solde restant.
 
 La phase `all` conserve une T4 pendant toute sa durée (y compris génération et
 tests), contrairement aux phases séparées plus économes. Le timeout de deux
-heures concerne un appel, pas un plafond de dépenses pour le compte. La durée
-réelle de ce protocole n'a pas pu être mesurée dans cette session.
+heures concerne un appel, pas un plafond de dépenses pour le compte. Les temps mesurés des entraînements sont publiés dans `results/training_*.json`.
 
 ## Exécution locale complète
 
@@ -121,8 +138,7 @@ Les appels GPU emploient une T4, un seul conteneur, zéro retry et un timeout de
 30 minutes par appel. Le tarif consulté le 25/11/2026 est de 0,000164 USD/s pour
 la T4, soit environ 0,59 USD/h, hors CPU, RAM et stockage. Ce timeout limite une
 exécution, **il ne constitue pas un plafond global de facturation**. Vérifier le
-solde et le coût observé après chaque phase, arrêter avant 7 euros. Les durées
-réelles ne sont pas encore mesurées. Un appel peut expirer avant sa fin.
+solde et le coût observé après chaque phase, arrêter avant 7 euros. Les entraînements ont duré environ 5 min 13 s (easy) et 15 min 32 s (mixed), hors évaluations. Un appel peut expirer avant sa fin.
 Les jeux compilés sont produits dans l'image Linux CPU, l'entraînement et
 l'inférence tournent sur GPU. Le volume conserve les fichiers terminés.
 
@@ -149,6 +165,4 @@ et l'oral sont en français.
 python scripts/play.py artifacts/games/easy/test/30000.z8 --adapter artifacts/lora_easy
 ```
 
-Si aucun entraînement n'a pu être terminé, montrer le code et expliquer le blocage.
-Préférer une trace réelle enregistrée à une démonstration improvisée. Ne jamais
-faire passer une trace inventée pour une partie du modèle.
+Une trace enregistrée permet aussi de montrer une partie sans GPU ni téléchargement pendant la soutenance. Les adaptateurs et les traces sont inclus dans l’archive de reproductibilité.

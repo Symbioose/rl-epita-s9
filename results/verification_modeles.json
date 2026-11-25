@@ -1,0 +1,22 @@
+{
+  "lora_easy": {
+    "trainable_parameters": 1081344,
+    "finite": true,
+    "data_hashes_match": {
+      "train": true,
+      "validation": true
+    },
+    "elapsed_seconds": 313.39491975100003,
+    "best_validation_loss": 0.0892714336514473
+  },
+  "lora_mixed": {
+    "trainable_parameters": 1081344,
+    "finite": true,
+    "data_hashes_match": {
+      "train": true,
+      "validation": true
+    },
+    "elapsed_seconds": 932.3890887379999,
+    "best_validation_loss": 0.028634151443839073
+  }
+}

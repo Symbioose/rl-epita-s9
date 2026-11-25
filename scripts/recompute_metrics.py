@@ -14,12 +14,13 @@ from textgame.evaluate import loop_signature, summarize, METRICS_VERSION
 
 def recompute(root="artifacts/eval", output="results/verification_metriques.json"):
     audit = []
-    for summary_path in sorted(Path(root).glob("*/*/summary.json")):
-        folder = summary_path.parent
-        summary = json.loads(summary_path.read_text())
-        if not summary.get("complete"):
-            continue
-        episodes = read_jsonl(folder / "episodes.jsonl")
+    for run_path in sorted(Path(root).glob("*/*/run.json")):
+        folder = run_path.parent
+        summary_path = folder / "summary.json"
+        summary = json.loads(summary_path.read_text()) if summary_path.exists() else None
+        config = json.loads(run_path.read_text())
+        episode_path = folder / "episodes.jsonl"
+        episodes = read_jsonl(episode_path) if episode_path.exists() else []
         old_loops = sum(e["loop"] for e in episodes)
         for episode in episodes:
             trace = read_jsonl(folder / "traces" / f"{episode['game_id']}.jsonl")
@@ -27,19 +28,22 @@ def recompute(root="artifacts/eval", output="results/verification_metriques.json
                 raise ValueError(f"Trace incomplète : {episode['game_id']}")
             signatures = [loop_signature(t["observation"], t["action"]) for t in trace]
             episode["loop"] = len(signatures) != len(set(signatures))
-        new = summarize(episodes)
+        new = summarize(episodes) if episodes else None
         # Il s'agit d'une correction des diagnostics, jamais d'une sélection de parties.
-        for key in ["n_games", "successes", "success_rate", "mean_steps_all", "mean_steps_success", "invalid_action_rate"]:
-            if new[key] != summary["metrics"][key]:
-                raise ValueError(f"Un résultat principal a changé : {folder}, {key}")
-        summary["metrics"] = new
-        summary["config"]["metrics_version"] = METRICS_VERSION
-        write_jsonl(folder / "episodes.jsonl", episodes)
-        save_json(summary_path, summary)
-        save_json(folder / "run.json", summary["config"])
+        if summary and summary.get("complete"):
+            for key in ["n_games", "successes", "success_rate", "mean_steps_all", "mean_steps_success", "invalid_action_rate"]:
+                if new[key] != summary["metrics"][key]:
+                    raise ValueError(f"Un résultat principal a changé : {folder}, {key}")
+            summary["metrics"] = new
+            summary["config"]["metrics_version"] = METRICS_VERSION
+            save_json(summary_path, summary)
+        config["metrics_version"] = METRICS_VERSION
+        if episode_path.exists():
+            write_jsonl(episode_path, episodes)
+        save_json(run_path, config)
         audit.append(dict(condition=str(folder.relative_to(root)), games=len(episodes),
             old_loop_episodes=old_loops, corrected_loop_episodes=sum(e["loop"] for e in episodes),
-            main_outcomes_unchanged=True))
+            complete=bool(summary and summary.get("complete")), main_outcomes_unchanged=True))
     save_json(output, dict(metrics_version=METRICS_VERSION, conditions=audit))
     print(len(audit), "conditions vérifiées")
 

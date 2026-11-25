@@ -1,75 +1,22 @@
-# État du projet au 25 novembre 2026
+# Projet exécuté et livré — 25 novembre 2026
 
-## État actuel
+- Deux adaptateurs LoRA Qwen2.5-0.5B-Instruct entraînés réellement sur T4.
+- 360 jeux TextWorld compilés, splits par jeu et empreintes contrôlés.
+- 279 démonstrations gagnantes acceptées, un rejet train avancé documenté.
+- 1371 transitions expertes rejouées avec succès dans TextWorld.
+- 1179 exemples train mixtes et 192 validation contrôlés par le tokenizer Qwen.
+- Poids LoRA finis ; empreintes des données conformes aux métadonnées.
+- 24 conditions d'évaluation complètes : 480 épisodes test et 240 validation.
+- Diagnostic de revisite recalculé depuis les traces ; résultats principaux inchangés.
+- 18 tests réussis sous Linux, sans test ignoré, dont compilation et partie experte.
+- Modules `src/` et tests conformes aux empreintes de la vérification Linux.
+- Présentation HTML et PDF 16:9, graphique des résultats et notes orales.
 
-Le dépôt est publié sur https://github.com/Symbioose/rl-epita-s9.
-Les dépendances sont installées et 14 tests passent dans le conteneur Linux Modal,
-y compris le test de compilation et partie experte (voir tests-linux.txt).
-TextWorld 1.7.0 exige le format .z8 : cette correction est appliquée.
-Le tokenizer Qwen réel confirme les cibles action + fin de message, prompt masqué.
-La génération complète des jeux est en cours sur Modal ; entraînement et évaluations
-ne sont pas encore terminés. La présentation PDF 16:9 a été rendue et relue.
+GitHub Actions ne peut pas démarrer ses jobs à cause d’une restriction du compte.
+La preuve de tests exécutés est le journal Linux Modal ; aucun badge CI vert n'est
+revendiqué. Le Dockerfile est fourni mais n’a pas été exécuté sur ce Mac.
 
-## Historique des blocages initiaux (résolus ou contournés)
-
-## Vérifications exécutées
-
-- `python3 -m unittest discover -s tests -v` : 13 tests passent, 1 test d'intégration ignoré.
-- `python3 -m compileall -q src scripts modal_app.py` : succès.
-- `python3 scripts/report.py` : rapport sans chiffres fictifs en l'absence de logs.
-
-Les tests des rollouts utilisent un environnement factice minimal. Il ne remplace
-pas TextWorld et ses succès ne sont pas des performances du modèle.
-
-## Blocages observés
-
-- `uv pip install` : crash du composant system-configuration de uv sur ce Mac.
-- `python -m pip install textworld ...` : échec de résolution DNS de pypi.org.
-- `curl https://pypi.org/...` : même erreur de résolution DNS.
-- Les poids Qwen ne sont pas présents localement. Aucun entraînement lancé.
-- Initialement, Modal n’était pas installé et aucun crédit n’avait été consommé.
-  Le calcul distant est maintenant lancé, avec un seul conteneur T4 plafonné à deux heures.
-- La création du deck dans Spaces est refusée (`page_age_restricted`). Le rendu
-  fourni est donc un fichier HTML local autonome, sans appel à ce service.
-
-## Non validé
-
-Installation Linux/Docker/Modal, compilation des jeux, oracle, collecte réelle,
-tokenizer Qwen réel, fine-tuning, consommation mémoire, temps et coût GPU,
-rollouts, amélioration par LoRA, transfert et ablation de l'historique.
-
-## Terminer l'expérience
-
-Suivre README.md, exécuter d'abord le test d'intégration. En cas d'échec, corriger
-le pipeline avant d'engager une grande expérience. Après exécution, générer le
-rapport et remplacer les diapositives « mesures non disponibles » par des valeurs
-provenant des logs. Conserver une copie de cet état pour la traçabilité.
-
-## Présentation et publication
-
-- Diaporama HTML : 16 sections et 16 notes vérifiées par analyse HTML ; JavaScript
-  valide avec `node --check`. Vérification visuelle impossible : hôte du navigateur
-  indisponible et ouverture du serveur local refusée par le bac à sable.
-- Initialisation `.git` dans le workspace refusée (répertoire protégé en lecture).
-  Un dépôt de publication distinct est préparé dans `/private/tmp/rl-epita-s9-publish`.
-- GitHub inaccessible par DNS (`Could not resolve host: github.com`). Le push reste
-  à effectuer ; aucun dépôt distant n'a été vérifié ou modifié.
-- Workflow GitHub Actions fourni pour lancer le test d'intégration Linux après
-  publication. Il n'a pas tourné et ne télécharge aucun modèle pour le training.
-
-## Reprise de la tâche
-
-Le réseau local et GitHub restent inaccessibles par DNS. Docker est installé mais
-son daemon est inaccessible. Aucun paquet ML ni poids Qwen n'a été trouvé dans
-les caches vérifiés. Le runner complet a été exécuté : il s'arrête explicitement
-sur l'absence de textworld, torch, transformers, peft et accelerate.
-
-Corrections vérifiées : reprise des évaluations sans rejouer les jeux terminés,
-refus de mélanger des configurations et poids différents, suppression des résumés
-obsolètes, écritures atomiques des JSON/JSONL. Deux tests supplémentaires passent.
-La présentation peut maintenant importer les mesures complètes de summary.json.
-Son rendu visuel et les expériences réelles restent non vérifiés.
-
-Une intégration GitHub a été découverte mais n'est pas installée/connectée. Elle
-pourrait permettre la publication après connexion ; aucun accès à Modal n'a été
-trouvé parmi les intégrations proposées. Aucun secret n'a été utilisé ou publié.
+Voir `tests-linux.txt`, `tests-verification.json`, `verification_modeles.json`,
+`tokenisation.json`, `verification_metriques.json`, `mesures.json` et `BILAN.md`.
+Le coût facturé du compte et le pic de mémoire GPU ne sont pas mesurés.
+Les performances ne sont pas une garantie sur d’autres distributions ou entraînements.

@@ -91,7 +91,8 @@ def main(root="artifacts"):
     run("slides", [sys.executable, str(PROJECT / "presentation/build.py"), "--results",
                    str(root / "eval/test"), "--output", str(delivery)])
     save_json(delivery / "completion.json", dict(complete=True,
-        manifest_sha256=digest(root / "manifest.jsonl"), evaluation_conditions=12,
+        manifest_sha256=digest(root / "manifest.jsonl"), evaluation_conditions=24,
+        test_conditions=12, validation_conditions=12,
         description="Deux niveaux, six agents, validation puis test ; résultats dans les logs."))
     print(f"Protocole terminé. Rendus : {delivery}", flush=True)
 

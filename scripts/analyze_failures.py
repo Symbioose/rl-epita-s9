@@ -41,7 +41,7 @@ def analyze(root="artifacts/eval/test", output="results/ECHECS.md"):
     if not found:
         lines += ["Aucun échec réel issu d'une condition complète n'est disponible."]
     Path(output).parent.mkdir(parents=True, exist_ok=True)
-    Path(output).write_text("\n".join(lines)+"\n", encoding="utf-8")
+    Path(output).write_text("\n".join(lines).rstrip()+"\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

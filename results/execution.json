@@ -1,0 +1,170 @@
+[
+  {
+    "step": "tests",
+    "returncode": 0,
+    "seconds": 8.08727478981018,
+    "log": "artifacts/execution/00-tests.log"
+  },
+  {
+    "step": "train-mixed",
+    "returncode": 0,
+    "seconds": 957.5861167907715,
+    "log": "artifacts/execution/01-train-mixed.log"
+  },
+  {
+    "step": "validation-oracle-easy",
+    "returncode": 0,
+    "seconds": 4.232854604721069,
+    "log": "artifacts/execution/02-validation-oracle-easy.log"
+  },
+  {
+    "step": "validation-random-easy",
+    "returncode": 0,
+    "seconds": 4.567595958709717,
+    "log": "artifacts/execution/03-validation-random-easy.log"
+  },
+  {
+    "step": "validation-base-easy",
+    "returncode": 0,
+    "seconds": 82.74388194084167,
+    "log": "artifacts/execution/04-validation-base-easy.log"
+  },
+  {
+    "step": "validation-lora_easy-easy",
+    "returncode": 0,
+    "seconds": 51.82020616531372,
+    "log": "artifacts/execution/05-validation-lora_easy-easy.log"
+  },
+  {
+    "step": "validation-lora_easy_h0-easy",
+    "returncode": 0,
+    "seconds": 84.50956296920776,
+    "log": "artifacts/execution/06-validation-lora_easy_h0-easy.log"
+  },
+  {
+    "step": "validation-lora_mixed-easy",
+    "returncode": 0,
+    "seconds": 22.323922157287598,
+    "log": "artifacts/execution/07-validation-lora_mixed-easy.log"
+  },
+  {
+    "step": "validation-oracle-advanced",
+    "returncode": 0,
+    "seconds": 3.9579062461853027,
+    "log": "artifacts/execution/08-validation-oracle-advanced.log"
+  },
+  {
+    "step": "validation-random-advanced",
+    "returncode": 0,
+    "seconds": 5.492081880569458,
+    "log": "artifacts/execution/09-validation-random-advanced.log"
+  },
+  {
+    "step": "validation-base-advanced",
+    "returncode": 0,
+    "seconds": 75.48022365570068,
+    "log": "artifacts/execution/10-validation-base-advanced.log"
+  },
+  {
+    "step": "validation-lora_easy-advanced",
+    "returncode": 0,
+    "seconds": 153.68705940246582,
+    "log": "artifacts/execution/11-validation-lora_easy-advanced.log"
+  },
+  {
+    "step": "validation-lora_easy_h0-advanced",
+    "returncode": 0,
+    "seconds": 105.10613632202148,
+    "log": "artifacts/execution/12-validation-lora_easy_h0-advanced.log"
+  },
+  {
+    "step": "validation-lora_mixed-advanced",
+    "returncode": 0,
+    "seconds": 63.85601568222046,
+    "log": "artifacts/execution/13-validation-lora_mixed-advanced.log"
+  },
+  {
+    "step": "test-oracle-easy",
+    "returncode": 0,
+    "seconds": 4.222959756851196,
+    "log": "artifacts/execution/14-test-oracle-easy.log"
+  },
+  {
+    "step": "test-random-easy",
+    "returncode": 0,
+    "seconds": 7.08699107170105,
+    "log": "artifacts/execution/15-test-random-easy.log"
+  },
+  {
+    "step": "test-base-easy",
+    "returncode": 0,
+    "seconds": 143.49811697006226,
+    "log": "artifacts/execution/16-test-base-easy.log"
+  },
+  {
+    "step": "test-lora_easy-easy",
+    "returncode": 0,
+    "seconds": 90.33634924888611,
+    "log": "artifacts/execution/17-test-lora_easy-easy.log"
+  },
+  {
+    "step": "test-lora_easy_h0-easy",
+    "returncode": 0,
+    "seconds": 165.7871458530426,
+    "log": "artifacts/execution/18-test-lora_easy_h0-easy.log"
+  },
+  {
+    "step": "test-lora_mixed-easy",
+    "returncode": 0,
+    "seconds": 40.92797565460205,
+    "log": "artifacts/execution/19-test-lora_mixed-easy.log"
+  },
+  {
+    "step": "test-oracle-advanced",
+    "returncode": 0,
+    "seconds": 5.175975322723389,
+    "log": "artifacts/execution/20-test-oracle-advanced.log"
+  },
+  {
+    "step": "test-random-advanced",
+    "returncode": 0,
+    "seconds": 8.827696323394775,
+    "log": "artifacts/execution/21-test-random-advanced.log"
+  },
+  {
+    "step": "test-base-advanced",
+    "returncode": 0,
+    "seconds": 164.80909180641174,
+    "log": "artifacts/execution/22-test-base-advanced.log"
+  },
+  {
+    "step": "test-lora_easy-advanced",
+    "returncode": 0,
+    "seconds": 291.01229786872864,
+    "log": "artifacts/execution/23-test-lora_easy-advanced.log"
+  },
+  {
+    "step": "test-lora_easy_h0-advanced",
+    "returncode": 0,
+    "seconds": 200.02218413352966,
+    "log": "artifacts/execution/24-test-lora_easy_h0-advanced.log"
+  },
+  {
+    "step": "test-lora_mixed-advanced",
+    "returncode": 0,
+    "seconds": 129.58095622062683,
+    "log": "artifacts/execution/25-test-lora_mixed-advanced.log"
+  },
+  {
+    "step": "report",
+    "returncode": 0,
+    "seconds": 0.2729182243347168,
+    "log": "artifacts/execution/26-report.log"
+  },
+  {
+    "step": "slides",
+    "returncode": 0,
+    "seconds": 0.07878947257995605,
+    "log": "artifacts/execution/27-slides.log"
+  }
+]

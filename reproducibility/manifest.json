@@ -1,0 +1,21 @@
+{
+  "archive": "experiences.tar.gz",
+  "sha256": "3bd3053a42986e001775422098a6106ea175540ccc06a05d9576cd41d7714ba2",
+  "bytes": 70688169,
+  "files": 1945,
+  "games": 360,
+  "models": {
+    "lora_easy": {
+      "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "base_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "adapter_sha256": "7f8f083d4bed03cfbc36887b4d62e262d535ce3bf511bba26d81c89ff18e7fef"
+    },
+    "lora_mixed": {
+      "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "base_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "adapter_sha256": "2359cec770df7d19ffc61344cedda01602b7154fcdc8740800d5fba11dbf2e50"
+    }
+  },
+  "complete_evaluation_conditions": 24,
+  "metrics_version": 2
+}

@@ -65,7 +65,8 @@ r × d_entrée. Il faut r(d_entrée+d_sortie) paramètres au lieu de d_entrée×
 
 Exemple numérique : matrice 1024×1024, rang 16. W contient 1 048 576 paramètres ;
 A et B ensemble en contiennent 32 768. Cette illustration ne donne pas le nombre
-total entraînable de Qwen, qui sera mesuré par le code.
+total entraînable de Qwen : le code mesure 1 081 344 paramètres dans nos adaptateurs,
+soit 0,2184 % des 495 114 112 paramètres du modèle adapté.
 
 Nous adaptons `q_proj` et `v_proj`, rang 16, α=32, dropout 0,05. LoRA réduit surtout
 les gradients et états d'optimiseur à stocker. Le modèle de base occupe encore de

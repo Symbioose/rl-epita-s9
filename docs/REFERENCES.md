@@ -34,5 +34,5 @@
   Simulation to the Real World* (2017). https://arxiv.org/abs/1703.06907
 
 Les messages du cours ont été fournis par l'utilisateur. Les modules Nowledgeable
-et le contenu complet du diaporama Google n'ont pas été consultés : aucun accès à
+et le contenu complet du diaporama Google n'ont pas pu être consultés (lien Slides inaccessible via l’outil de lecture) : aucun accès à
 un espace de cours privé n'a été tenté et aucune consigne supplémentaire n'en est déduite.

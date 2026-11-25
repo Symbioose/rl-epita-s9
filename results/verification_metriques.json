@@ -1,0 +1,197 @@
+{
+  "metrics_version": 2,
+  "conditions": [
+    {
+      "condition": "test/base_advanced",
+      "games": 40,
+      "old_loop_episodes": 6,
+      "corrected_loop_episodes": 40,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/base_easy",
+      "games": 40,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 40,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/lora_easy_advanced",
+      "games": 40,
+      "old_loop_episodes": 11,
+      "corrected_loop_episodes": 37,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/lora_easy_easy",
+      "games": 40,
+      "old_loop_episodes": 2,
+      "corrected_loop_episodes": 10,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/lora_easy_h0_advanced",
+      "games": 40,
+      "old_loop_episodes": 14,
+      "corrected_loop_episodes": 40,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/lora_easy_h0_easy",
+      "games": 40,
+      "old_loop_episodes": 11,
+      "corrected_loop_episodes": 39,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/lora_mixed_advanced",
+      "games": 40,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 10,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/lora_mixed_easy",
+      "games": 40,
+      "old_loop_episodes": 1,
+      "corrected_loop_episodes": 1,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/oracle_advanced",
+      "games": 40,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 0,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/oracle_easy",
+      "games": 40,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 0,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/random_advanced",
+      "games": 40,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 36,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "test/random_easy",
+      "games": 40,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 38,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/base_advanced",
+      "games": 20,
+      "old_loop_episodes": 1,
+      "corrected_loop_episodes": 19,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/base_easy",
+      "games": 20,
+      "old_loop_episodes": 1,
+      "corrected_loop_episodes": 19,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/lora_easy_advanced",
+      "games": 20,
+      "old_loop_episodes": 7,
+      "corrected_loop_episodes": 20,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/lora_easy_easy",
+      "games": 20,
+      "old_loop_episodes": 3,
+      "corrected_loop_episodes": 6,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/lora_easy_h0_advanced",
+      "games": 20,
+      "old_loop_episodes": 5,
+      "corrected_loop_episodes": 19,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/lora_easy_h0_easy",
+      "games": 20,
+      "old_loop_episodes": 4,
+      "corrected_loop_episodes": 16,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/lora_mixed_advanced",
+      "games": 20,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 5,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/lora_mixed_easy",
+      "games": 20,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 0,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/oracle_advanced",
+      "games": 20,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 0,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/oracle_easy",
+      "games": 20,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 0,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/random_advanced",
+      "games": 20,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 18,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    },
+    {
+      "condition": "validation/random_easy",
+      "games": 20,
+      "old_loop_episodes": 0,
+      "corrected_loop_episodes": 17,
+      "complete": true,
+      "main_outcomes_unchanged": true
+    }
+  ]
+}

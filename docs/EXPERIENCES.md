@@ -1,7 +1,7 @@
 # Protocole fixé avant les résultats
 
-Toutes les expériences ci-dessous sont **prévues et implémentées**, pas encore
-exécutées. La disponibilité de scripts ne prouve pas une performance.
+Le protocole a été fixé avant les résultats : deux fine-tunings, six agents, deux
+niveaux, puis validation et test séparés. Les sorties réelles sont dans `results/`.
 
 ## Jeux
 
@@ -52,7 +52,10 @@ Aucune optimisation d'hyperparamètres guidée par le test.
   de réentraînement. Avec seulement 40 jeux, 1 victoire représente 2,5 points.
 - Coups moyens sur tous les épisodes, et séparément sur les réussites.
   La moyenne sur les seules réussites est `null` si aucune réussite.
-- Invalidité opérationnelle : commande générée absente des actions admissibles
+- Invalidité opérationnelle : total des commandes non admissibles divisé par le
+  total des commandes exécutées, toutes parties confondues. Les échecs longs
+  peuvent peser fortement dans ce taux. Une commande générée est non admissible
+  si elle est absente des actions admissibles
   après comparaison insensible à la casse,
   sauf `look` et `inventory`. Ce n'est pas une mesure parfaite de la validité du
   parseur : des synonymes compris peuvent être comptés invalides. Aucune projection

@@ -52,7 +52,7 @@ insuffisante ; l'épisode complet mesure l'objectif réel.
 - Exploration / exploitation : chercher des informations nouvelles ou utiliser
   ce qu'on croit déjà efficace. L'expert évite ici le coût d'exploration du training.
 - Entropie : −Σp log p, mesure de dispersion d'une politique. Une régularisation
-  entropique favorise des politiques moins concentrées. Nous n'en ajoutons pas.
+  entropique favorise des politiques moins concentrées. L’article d’Ahmed et al. montre aussi, dans certains environnements, un paysage d’optimisation plus lisse ; ce n’est pas uniquement une histoire d’exploration. Nous n’en ajoutons pas.
 - Récompense extrinsèque : réussite de quête donnée par le jeu. Intrinsèque : signal
   auxiliaire de nouveauté/curiosité. Aucune curiosité n'est implémentée ici.
 - Domain randomization : varier les environnements pour apprendre des invariances.
@@ -67,12 +67,12 @@ mémoriser une formule isolée.
 
 1. Montrer une observation publique et la commande proposée.
 2. Expliquer l'action réellement exécutée et la récompense de transition.
-3. Relire une réussite ET un échec issus des logs, si disponibles.
-4. Afficher un tableau de résultats calculé automatiquement, si disponible.
+3. Relire une réussite ET un échec issus des logs.
+4. Afficher le tableau de résultats calculé automatiquement.
 
-État actuel : aucun entraînement exécuté, aucun résultat de jeu. Dire explicitement
-« nous avons construit le pipeline, mais son exécution reste à valider » si ce
-blocage persiste au moment de l'oral. Ne pas dire « le modèle gagne » sans trace.
+Deux adaptateurs ont réellement été entraînés sur T4. Les données, configurations,
+poids et traces des parties sont archivés. Les résultats à citer sont ceux du
+test final, pas la loss d’entraînement ni les taux de validation.
 
 **Pourquoi ne pas avoir utilisé PPO ou DQN pour entraîner le SLM ?** Le socle
 attend un fine-tuning sur des démonstrations. TextWorld fournit un expert, ce qui

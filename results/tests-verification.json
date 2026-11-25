@@ -1,0 +1,19 @@
+{
+  "complete": true,
+  "exit_code": 0,
+  "python": "3.11.18 (main, Oct 26 2026, 22:56:34) [GCC 14.2.0]",
+  "source_sha256": {
+    "src/textgame/common.py": "9752c328480ee9af1e369df49b27bb4061f8bda2670d7d03f1901d78949e2a41",
+    "src/textgame/train.py": "c97ed56fe63a6059cabc9c183def13c8db830a7d35e034d9023a9863979e2a43",
+    "src/textgame/__init__.py": "0a20438958ab9ed4e21f9f5211f8f28f723fbadc95b76fb371a4e25a3ac53a78",
+    "src/textgame/tokenization.py": "a89699f7b2b746cee088d49ede332c722412d78d4bef0849d062e5dfcc96f096",
+    "src/textgame/agents.py": "2a675f11eecc225357a6ce31bcc1a9860dbdf4ec17584b4cff8e5ec424a4ce7c",
+    "src/textgame/data.py": "361070f63e45a76df6dadd0eacf76eb1041da05a60c98382b626a4fa077822dd",
+    "src/textgame/games.py": "e64acaa337513f92e1ca736b6117f98efcc6668993fccc303bb98222b7349b5d",
+    "src/textgame/evaluate.py": "05f4ae05888367e5252231769f33751ddea500ccc3ed45e0164b683a90f4c0fe",
+    "tests/test_collection.py": "a6654726dc21b99fefca8c1b38d77fba809d7a525885e12162dccd1f982572b2",
+    "tests/test_textworld_integration.py": "ad9cf50ba5e9595a42c988d5619933ead1757fb2b27605a175fb3b2b65807cf9",
+    "tests/test_pipeline.py": "6c50b5451aa8da7ba30283e6542c50238b0486d0cc7b42c593214d8173e21445",
+    "tests/test_resume.py": "f5a3b8fc372135804b3e49271436eb91b15a9019e668e62078c9036ad27af9e6"
+  }
+}

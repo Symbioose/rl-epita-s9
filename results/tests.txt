@@ -1,3 +1,6 @@
+Historique : première vérification locale, avant les corrections finales.
+Pour le résultat final (18 tests Linux sans skip), voir tests-linux.txt.
+
 test_action_only_loss (test_pipeline.PipelineTests.test_action_only_loss) ... ok
 test_duplicate_games_and_modified_games (test_pipeline.PipelineTests.test_duplicate_games_and_modified_games) ... ok
 test_empty_generation (test_pipeline.PipelineTests.test_empty_generation) ... ok

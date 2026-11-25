@@ -52,6 +52,30 @@ def prepare(scale: float):
     execute("prepare", scale)
 
 
+@app.function(image=image, volumes={"/storage": volume}, timeout=300, retries=0,
+              max_containers=1, cpu=2, memory=4096)
+def verify():
+    """Vérification Linux autonome, sans GPU ni modification des jeux."""
+    import hashlib
+    import subprocess
+    import sys
+    from textgame.common import save_json
+    folder = Path("/storage/artifacts")
+    folder.mkdir(exist_ok=True)
+    result = subprocess.run(["python", "-m", "unittest", "discover", "-s", "/project/tests", "-v"],
+                            text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    (folder / "tests-final.log").write_text(result.stdout)
+    complete = result.returncode == 0 and "skipped=" not in result.stdout
+    save_json(folder / "tests-final.json", dict(complete=complete, exit_code=result.returncode,
+        python=sys.version, source_sha256={str(p.relative_to("/project")):
+        hashlib.sha256(p.read_bytes()).hexdigest() for base in ["src", "tests"]
+        for p in Path("/project", base).rglob("*.py")}))
+    volume.commit()
+    print(result.stdout, flush=True)
+    if not complete:
+        raise RuntimeError("Les tests Linux n'ont pas tous été exécutés avec succès")
+
+
 @app.function(image=image, volumes={"/storage": volume}, gpu="T4", timeout=1800,
               retries=0, max_containers=1, cpu=2, memory=8192)
 def gpu_phase(phase: str, experiment: str = "", level: str = ""):
@@ -72,11 +96,13 @@ def full_project():
 
 @app.local_entrypoint()
 def main(phase: str = "prepare", scale: float = 1.0, experiment: str = "", level: str = ""):
-    if phase not in {"all", "prepare", "train", "validation", "test"}:
+    if phase not in {"all", "verify", "prepare", "train", "validation", "test"}:
         raise ValueError("Phase inconnue")
     if not 0 < scale <= 1:
         raise ValueError("scale doit appartenir à ]0,1]")
-    if phase == "all":
+    if phase == "verify":
+        verify.remote()
+    elif phase == "all":
         if scale != 1 or experiment or level:
             raise ValueError("La phase all exécute le protocole complet uniquement")
         full_project.remote()
