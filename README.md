@@ -29,7 +29,7 @@ pour consulter les résultats. Voir [les vérifications](results/STATUT.md).
 
 ## Lire et présenter
 
-- [Présentation PDF — 10 slides visuelles](presentation/presentation.pdf).
+- [Présentation PDF — 11 slides visuelles](presentation/presentation.pdf).
 - [Annexes pour les questions](presentation/annexes.pdf) : paramètres, métriques et références.
 - [Présentation hors ligne](presentation/index.html) : ouvrir dans un navigateur,
   flèches pour avancer, `N` pour les notes, `F` pour le plein écran. Impression PDF

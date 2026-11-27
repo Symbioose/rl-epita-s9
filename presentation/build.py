@@ -1,4 +1,4 @@
-"""Soutenance visuelle : 10 slides, illustrations vectorielles et données réelles."""
+"""Soutenance visuelle : 11 slides, illustrations vectorielles et données réelles."""
 import argparse
 import base64
 import json
@@ -147,6 +147,30 @@ DIRE : dans cette partie du test, LoRA simple va à l’est, ouvre le type B loc
 La récompense est la différence entre scores successifs : 0, 0, puis 1. La victoire est vraie après la troisième commande. L’état complet est caché ; l’objectif, la description et l’inventaire sont fournis.
 TRANSITION : comment apprendre à choisir ces commandes ?''')
 
+    b=text(65,175,'RL DIRECT : APPRENDRE PAR ESSAIS',22,MUTED,700)
+    b+=text(665,175,'NOTRE CHOIX : IMITER UN EXPERT',22,BLUE,700)
+    b+=line(625,200,625,565,'#CBD0CB',2)
+    b+=circle(155,280,48,ORANGE)+text(155,289,'Agent',22,'white',700,'middle')
+    b+=rect(350,237,190,85,'#E4E6DF',10)+text(445,289,'TextWorld',25,INK,700,'middle')
+    b+=arrow(215,266,335,266,ORANGE)+text(275,242,'action',19,MUTED,anchor='middle')
+    b+=arrow(335,311,215,311,ORANGE)+text(275,347,'récompense',19,MUTED,anchor='middle')
+    b+=lines(65,412,['Récompenses souvent tardives','Beaucoup de commandes à explorer','Plus de parties et de calcul à prévoir'],25,INK,43)
+    b+=text(65,568,'Piste possible, non entraînée ici.',23,MUTED)
+    for i,(label,color) in enumerate([('Expert',GREEN),('Exemples',BLUE),('LoRA',ORANGE)]):
+        x=735+i*185;b+=circle(x,280,47,color)+text(x,288,label,21,'white',700,'middle')
+        if i<2:b+=arrow(x+60,280,x+124,280,BLUE,3)
+    b+=lines(665,412,['Walkthrough déjà disponible','Une bonne commande à chaque pas','Un premier modèle avec peu de budget'],25,INK,43)
+    b+=text(665,568,'Entraînement supervisé par imitation.',23,BLUE,600)
+    b+=text(65,632,'Environnement RL pour agir et mesurer ; behaviour cloning pour apprendre.',26,INK,700)
+    add('Pourquoi apprendre par imitation ?',b,'''Durée : 60 secondes.
+MONTRER : comparer la boucle de gauche à la chaîne de droite, puis lire la phrase du bas.
+DIRE : notre problème relève du cadre RL : une action change le monde, le jeu renvoie une observation et une récompense, et la réussite dépend d’une séquence de décisions. TextWorld permet donc de mesurer une politique en interaction, au-delà de prédire une commande sur un fichier.
+Pour entraîner le SLM directement par récompense, il faudrait explorer de nombreuses commandes et obtenir assez de succès malgré des récompenses souvent tardives. Chaque tentative impose des générations de texte et des parties supplémentaires. Cela motive notre choix avec un petit budget ; nous n’avons pas entraîné PPO ou DQN pour mesurer leur coût ni constaté leur échec.
+Le solveur TextWorld fournit déjà des démonstrations. Nous choisissons donc le behaviour cloning : une cible de commande à chaque étape, une loss supervisée et une adaptation LoRA. Le sujet demande ce fine-tuning, il ne demande pas nécessairement une optimisation directe par retour.
+FORMULATION À RETENIR : nous avons utilisé un environnement de reinforcement learning, mais entraîné notre modèle par apprentissage par imitation. Nous n’avons pas commencé par entraîner un agent RL avant d’abandonner.
+L’imitation dépend de la qualité et de la couverture de l’expert ; le modèle peut mal récupérer après une erreur. Une optimisation par récompense après ce premier modèle serait une extension, non réalisée.
+TRANSITION : voici précisément comment l’expert fournit nos exemples.''')
+
     b=text(65,174,'APPRENTISSAGE',20,MUTED,700)
     cols=[75,475,875]
     for x,title,subtitle,color in zip(cols,['Solveur TextWorld','Démonstrations','Adaptateur LoRA'],['joue les jeux train','contexte + commande','apprend par imitation'],[GREEN,BLUE,ORANGE]):
@@ -270,7 +294,7 @@ DAgger serait une suite : interroger l’expert dans les états visités par l�
 CONCLURE : code, données, adaptateurs et traces sont archivés ; 18 tests Linux passent. Les paramètres, références et métriques sont en annexe pour les questions.''',True)
 
     write_deck(out,slides,'index.html','Présentation principale',assets)
-    (out/'notes.md').write_text('# Notes de soutenance\n\n10 slides, environ 12 minutes. Les durées proposées totalisent environ 12 min 15 s.\nLes annexes servent aux questions.\n\n'+'\n\n'.join(f'## {i+1}. {title}\n\n{notes}' for i,(title,asset,notes) in enumerate(slides)))
+    (out/'notes.md').write_text('# Notes de soutenance\n\n11 slides, environ 13 minutes. Les durées proposées totalisent environ 13 min 15 s.\nLes annexes servent aux questions.\n\n'+'\n\n'.join(f'## {i+1}. {title}\n\n{notes}' for i,(title,asset,notes) in enumerate(slides)))
     # Separate annex: avoids padding the main talk with implementation detail.
     slides=[];asset_prefix="annexe"
     b=lines(65,178,['Qwen2.5-0.5B-Instruct · LoRA q_proj/v_proj','r = 16 · α = 32 · dropout = 0,05','Learning rate = 2e−4 · batch 2 × accumulation 8','3 époques configurées · graine 42','Contexte 1024 tokens · greedy · 32 nouveaux tokens max'],28,INK,63)
@@ -294,7 +318,7 @@ CONCLURE : code, données, adaptateurs et traces sont archivés ; 18 tests Linux
     b+=lines(65,588,['Références complètes : docs/REFERENCES.md','Traces, données et adaptateurs : archive de reproductibilité.'],24,MUTED,37)
     add('Annexe : sources et preuves',b,'https://arxiv.org/abs/1806.11532 ; https://arxiv.org/abs/2106.09685 ; https://arxiv.org/abs/1011.0686 ; https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct. Jericho et ALFWorld ne sont pas implémentés.')
     write_deck(out,slides,'annexes.html','Annexes',assets)
-    print('10 slides visuelles + 3 annexes séparées générées.')
+    print('11 slides visuelles + 3 annexes séparées générées.')
 
 
 def write_deck(out,slides,filename,title,assets):

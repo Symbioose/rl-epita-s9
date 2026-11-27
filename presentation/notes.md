@@ -1,6 +1,6 @@
 # Notes de soutenance
 
-10 slides, environ 12 minutes. Les durées proposées totalisent environ 12 min 15 s.
+11 slides, environ 13 minutes. Les durées proposées totalisent environ 13 min 15 s.
 Les annexes servent aux questions.
 
 ## 1. APPRENDRE À JOUER PAR LE TEXTE
@@ -18,7 +18,18 @@ DIRE : dans cette partie du test, LoRA simple va à l’est, ouvre le type B loc
 La récompense est la différence entre scores successifs : 0, 0, puis 1. La victoire est vraie après la troisième commande. L’état complet est caché ; l’objectif, la description et l’inventaire sont fournis.
 TRANSITION : comment apprendre à choisir ces commandes ?
 
-## 3. L’expert enseigne, puis le modèle joue seul
+## 3. Pourquoi apprendre par imitation ?
+
+Durée : 60 secondes.
+MONTRER : comparer la boucle de gauche à la chaîne de droite, puis lire la phrase du bas.
+DIRE : notre problème relève du cadre RL : une action change le monde, le jeu renvoie une observation et une récompense, et la réussite dépend d’une séquence de décisions. TextWorld permet donc de mesurer une politique en interaction, au-delà de prédire une commande sur un fichier.
+Pour entraîner le SLM directement par récompense, il faudrait explorer de nombreuses commandes et obtenir assez de succès malgré des récompenses souvent tardives. Chaque tentative impose des générations de texte et des parties supplémentaires. Cela motive notre choix avec un petit budget ; nous n’avons pas entraîné PPO ou DQN pour mesurer leur coût ni constaté leur échec.
+Le solveur TextWorld fournit déjà des démonstrations. Nous choisissons donc le behaviour cloning : une cible de commande à chaque étape, une loss supervisée et une adaptation LoRA. Le sujet demande ce fine-tuning, il ne demande pas nécessairement une optimisation directe par retour.
+FORMULATION À RETENIR : nous avons utilisé un environnement de reinforcement learning, mais entraîné notre modèle par apprentissage par imitation. Nous n’avons pas commencé par entraîner un agent RL avant d’abandonner.
+L’imitation dépend de la qualité et de la couverture de l’expert ; le modèle peut mal récupérer après une erreur. Une optimisation par récompense après ce premier modèle serait une extension, non réalisée.
+TRANSITION : voici précisément comment l’expert fournit nos exemples.
+
+## 4. L’expert enseigne, puis le modèle joue seul
 
 Durée : 75 secondes.
 MONTRER : suivre le trajet du solveur aux exemples, puis à LoRA ; descendre ensuite à la ligne d’évaluation.
@@ -26,7 +37,7 @@ DIRE : le solveur a accès à l’état symbolique pour trouver une bonne action
 C’est du behaviour cloning, comme le TP LunarLander : apprendre observation vers action à partir d’un expert. Ici une action est une suite de tokens. Nous utilisons un environnement RL, mais pas une optimisation par PPO ou Q-learning.
 TRANSITION : pour mesurer un apprentissage réel, les jeux du test doivent rester séparés.
 
-## 4. Des jeux nouveaux pour juger le modèle
+## 5. Des jeux nouveaux pour juger le modèle
 
 Durée : 70 secondes.
 MONTRER : la bande bleue train, orange validation et verte test, puis les deux tailles d’environnement.
@@ -35,7 +46,7 @@ Au niveau avancé, la largeur de quête passe aussi de 1 à 2, avec des sous-obj
 Une démonstration train avancée est rejetée : ambiguïté entre Canadian locker et Canadian limited edition locker. Le rejet et sa trace sont archivés ; aucun jeu test n’est retiré. On obtient 355 exemples simples ou 1179 mixtes.
 TRANSITION : sur ces exemples, quelle partie du texte doit-on apprendre à produire ?
 
-## 5. Apprendre la commande, token par token
+## 6. Apprendre la commande, token par token
 
 Durée : 75 secondes.
 MONTRER : le contexte gris et la commande bleue. Pointer les deux traits en dessous.
@@ -43,7 +54,7 @@ DIRE : le modèle apprend à rendre probable la commande experte, token par toke
 À l’entraînement, il voit les tokens experts précédents, c’est le teacher forcing. En partie, il reçoit ses propres actions précédentes et leurs conséquences. Une petite erreur peut l’amener dans un état rarement vu pendant l’apprentissage : la loss seule ne mesure donc pas la capacité à gagner.
 TRANSITION : on peut adapter Qwen sans réentraîner tous ses poids.
 
-## 6. LoRA apprend une petite correction
+## 7. LoRA apprend une petite correction
 
 Durée : 80 secondes.
 MONTRER : la grande matrice grise W, puis les deux matrices fines A et B.
@@ -52,7 +63,7 @@ Ici 1 081 344 paramètres reçoivent les gradients, soit 0,2184 % du modèle ada
 Les deux adaptateurs repartent du même Qwen initial. Le simple utilise 355 exemples, le mixte 1179. Le mixte a davantage de données et de mises à jour : le comparer ne permet pas d’isoler la seule diversité. Temps réels du fine-tuning, hors évaluations.
 TRANSITION : est-ce que cette adaptation change les parties sur les jeux non vus ?
 
-## 7. L’adaptation aide, le transfert reste difficile
+## 8. L’adaptation aide, le transfert reste difficile
 
 Durée : 100 secondes.
 MONTRER : commencer par les barres Initial et LoRA simple à gauche. Comparer ensuite LoRA simple et LoRA mixte à droite.
@@ -61,7 +72,7 @@ Les traits donnent les IC de Wilson à 95 % sur les jeux. Ils ne mesurent pas la
 Les nombres viennent des rollouts sauvegardés. Les coups, invalidité et revisites sont en annexe et dans le rapport.
 TRANSITION : une dernière expérience retire uniquement l’historique au même adaptateur.
 
-## 8. Retirer l’historique fait chuter la réussite
+## 9. Retirer l’historique fait chuter la réussite
 
 Durée : 70 secondes.
 MONTRER : les deux barres 33/40 et 1/40.
@@ -70,7 +81,7 @@ Motivation : tester l’utilité de la mémoire récente. L’écart est grand, 
 Sur avancé, le même modèle passe de 4/40 à 0/40. Le tableau complet reste en annexe.
 TRANSITION : regardons maintenant comment une erreur peut s’accumuler.
 
-## 9. Une action ratée peut bloquer toute la quête
+## 10. Une action ratée peut bloquer toute la quête
 
 Durée : 80 secondes.
 MONTRER : parcourir les trois événements de gauche à droite, puis pointer la réponse négative du jeu.
@@ -79,7 +90,7 @@ C’est une trace complète réelle et le premier échec simple par identifiant,
 L’invalidité est un proxy : des synonymes compris par le parseur peuvent être comptés non admissibles. Le diagnostic de boucle ignore le compteur de tours du feedback et recherche une répétition description/inventaire/commande.
 TRANSITION : que peut-on conclure sans dépasser ce que les expériences montrent ?
 
-## 10. Un petit modèle apprend, avec des limites
+## 11. Un petit modèle apprend, avec des limites
 
 Durée : 65 secondes.
 MONTRER : les deux grands nombres, puis revenir aux limites écrites en bas.
